@@ -1,4 +1,5 @@
 data/raw/
+data/processed/atomiccards_paper_constructed.json
  *.ipynb_checkpoints
  __pycache__/
  .venv/
