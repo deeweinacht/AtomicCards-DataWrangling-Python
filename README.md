@@ -1,11 +1,22 @@
 # AtomicCards-DataWrangling-Python
 End-to-end data preparation pipeline for the MTGJSON AtomicCards dataset. Parsing nested JSON, feature engineering, and exploratory profiling. Output published as a Kaggle dataset.
 
+## Quickstart
+```bash
+# === Windows ===
+setup\bootstrap.ps1  # setup dependencies and virtual environment
+.\.venv\Scripts\activate  # activate virtual environment
+
+# === macOS/Linux ===
+setup/mac_linux.sh  # setup dependencies and virtual environment
+source .venv/bin/activate # activate virtual environment
+```
 
 ### Card Selection
 
 This project focuses on cards relevant to real-world deckbuilding in paper-constructed formats.
 The following inclusion and exclusion rules were applied to the MTGJSON AtomicCards dataset to produce the filtered subset atomiccards_legal.json.
+
 
 **Included**
 
