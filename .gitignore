@@ -1,6 +1,11 @@
 data/raw/
 data/processed/atomiccards_paper_constructed.json
  *.ipynb_checkpoints
- __pycache__/
- .venv/
- .DS_Store
+.venv/
+.python-version
+.pytype/
+.pyright/
+.mypy_cache/
+.pytest_cache/
+__pycache__/
+.vscode/
