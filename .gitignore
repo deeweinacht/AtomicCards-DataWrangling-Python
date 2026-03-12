@@ -1,5 +1,7 @@
 data/raw/
-data/processed/atomiccards_paper_constructed.json
+data/curated/atomiccards_paper_constructed.json
+plan.md
+test.py
  *.ipynb_checkpoints
 .venv/
 .python-version

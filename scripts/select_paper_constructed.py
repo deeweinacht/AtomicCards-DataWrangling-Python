@@ -120,7 +120,7 @@ def process_cards(data: dict) -> dict:
         legal_cards[card_name] = faces
         counts["kept"] += 1
 
-    with open("data/processed/atomiccards_legal.json", "w", encoding="utf-8") as f:
+    with open("data/curated/atomiccards_paper_constructed.json", "w", encoding="utf-8") as f:
         json.dump(legal_cards, f, indent=2, ensure_ascii=False)
 
     return counts
