@@ -1,7 +1,17 @@
+"""
+Select script to identify cards that are legal in paper constructed formats, excluding those that are only digital, 
+have non-standard layouts or types, or are exclusively from unsets. 
+The script reads the raw MTGJSON data, applies filtering criteria, and outputs a JSON file in the same format
+containing only the cards that meet the paper constructed legality requirements.
+After processing, it prints counts of how many cards were kept and how many were excluded for each reason.
+"""
 import json
+from pathlib import Path
 
-RAW_DATA_FILE = "data/raw/atomiccards.json"
-PAPER_CONSTRUCTED_FILE = "data/processed/atomiccards_paper_constructed.json"
+RAW_DATA_FILE = Path("data/raw/atomiccards.json")
+OUT_DIR = Path("data/selected")
+OUTPUT_FILE = OUT_DIR.joinpath("atomiccards_paper_constructed.json")
+
 PAPER_FORMATS = {
     "commander",
     "oathbreaker",
@@ -16,43 +26,45 @@ PAPER_FORMATS = {
     "oldschool",
 }
 PLAYABLE_STATUSES = {"Legal", "Restricted"}
-UNSETS = {"UGL", "UNH", "UNST", "UND", "UNF"}
 NON_CONSTRUCTED_LAYOUTS = {
     "token",
     "emblem",
     "scheme",
     "vanguard",
-    "plane",
+    "planar",
+    "host",
+    "augment",
+}
+NON_CONSTRUCTED_SUPERTYPES = {
+    "host"
+}
+
+NON_CONSTRUCTED_TYPES = {
+    "conspiracy",
+    "eaturecray",
+    "ever",
+    "phenome-nom",
     "phenomenon",
+    "plane",
+    "scariest",
+    "scheme",
+    "see",
+    "stickers",
+    "universewalker",
+    "you'll"
+}
+
+NON_CONSTRUCTED_SUBTYPES = {
     "attraction",
-    "sticker",
     "contraption",
+    "dungeon"
 }
 
 
+UNSETS = {"UGL", "UNH", "PUNH", "UST", "PUST",  "UND", "UNF", "SUNF", "ULST", "UNK", "PUNK"}
+
 def card_is_funny(faces) -> bool:
     return any(bool(face.get("isFunny")) for face in faces)
-
-
-def card_has_ephemera_layout(faces) -> bool:
-    return any(
-        (face.get("layout", "") or "").lower() in NON_CONSTRUCTED_LAYOUTS
-        for face in faces
-    )
-
-
-def card_has_conspiracy(faces) -> bool:
-    # MTGJSON has "types" list and "type" string; check both, case-sensitive token
-    for face in faces:
-        types_list = face.get("types") or []
-        if "Conspiracy" in types_list:
-            return True
-        # fallback: scan the string if present
-        t = face.get("type") or ""
-        if "Conspiracy" in t.split(" "):
-            return True
-    return False
-
 
 def card_legal_any_paper_constructed(faces) -> bool:
     for face in faces:
@@ -63,13 +75,45 @@ def card_legal_any_paper_constructed(faces) -> bool:
     return False
 
 
-def card_from_unset(faces) -> bool:
+def card_has_non_constructed_layout(faces) -> bool:
+    return any(
+        (face.get("layout", "") or "").lower() in NON_CONSTRUCTED_LAYOUTS
+        for face in faces
+    )
+
+
+def card_has_non_standard_type(faces) -> bool:
+    # MTGJSON has multiple ways to indicate types, so we check all relevant fields
     for face in faces:
-        if face.get("firstPrinting") in UNSETS:
-            print(face.get("name"), face.get("firstPrinting"))
+        supertypes_list = face.get("supertypes") or []
+        if any(st.lower() in NON_CONSTRUCTED_SUPERTYPES for st in supertypes_list):
             return True
+
+        types_list = face.get("types") or []
+        if any(st.lower() in NON_CONSTRUCTED_TYPES for st in types_list):
+            return True
+        
+        subtypes_list = face.get("subtypes") or []
+        if any(st.lower() in NON_CONSTRUCTED_SUBTYPES for st in subtypes_list):
+            return True
+
+        t = face.get("type") or ""
+        split_t = t.split(" ")
+        if any(st.lower() in NON_CONSTRUCTED_TYPES for st in split_t):
+            print(f"Card '{face}' has non-standard type: {t}")
+        if any(st.lower() in NON_CONSTRUCTED_SUPERTYPES for st in split_t):
+            print(f"Card '{face}' has non-standard supertype: {t}")
+        if any(st.lower() in NON_CONSTRUCTED_SUBTYPES for st in split_t):
+            print(f"Card '{face}' has non-standard subtype: {t}")
     return False
 
+def card_is_from_unset(faces) -> bool:
+    for face in faces:
+        printings = face.get("printings") or []
+        if printings and len(printings) == 1:
+            if printings[0] in UNSETS:
+                return True
+    return False
 
 def print_card_counts(counts: dict):
     print(f"Total cards in source: {counts['total_cards']}")
@@ -77,14 +121,14 @@ def print_card_counts(counts: dict):
     print(
         "Excluded — funny:",
         counts["funny"],
-        "ephemera:",
-        counts["ephemera"],
-        "conspiracy:",
-        counts["conspiracy"],
-        "not_paper_playable:",
-        counts["not_paper_playable"],
-        "unset_card",
-        counts["unset_card"],
+        "nonstandard_layout:",
+        counts["nonstandard_layout"],
+        "nonstandard_type:",
+        counts["nonstandard_type"],
+        "not_paper_legal:",
+        counts["not_paper_legal"],
+        "from_unset:",
+        counts["from_unset"]
     )
 
 
@@ -94,43 +138,50 @@ def process_cards(data: dict) -> dict:
         "total_cards": len(data),
         "kept": 0,
         "funny": 0,
-        "ephemera": 0,
-        "conspiracy": 0,
-        "not_paper_playable": 0,
-        "unset_card": 0,
+        "nonstandard_layout": 0,
+        "nonstandard_type": 0,
+        "not_paper_legal": 0,
+        "from_unset": 0
     }
 
     for card_name, faces in data.items():
         if card_is_funny(faces):
             counts["funny"] += 1
             continue
-        if card_has_ephemera_layout(faces):
-            counts["ephemera"] += 1
+        if card_has_non_constructed_layout(faces):
+            counts["nonstandard_layout"] += 1
             continue
-        if card_has_conspiracy(faces):
-            counts["conspiracy"] += 1
+        if card_has_non_standard_type(faces):
+            counts["nonstandard_type"] += 1
             continue
         if not card_legal_any_paper_constructed(faces):
-            counts["not_paper_playable"] += 1
+            counts["not_paper_legal"] += 1
             continue
-        if card_from_unset(faces):
-            counts["unset_card"] += 1
+        if card_is_from_unset(faces):
+            counts["from_unset"] += 1
             continue
 
         legal_cards[card_name] = faces
         counts["kept"] += 1
 
-    with open("data/curated/atomiccards_paper_constructed.json", "w", encoding="utf-8") as f:
-        json.dump(legal_cards, f, indent=2, ensure_ascii=False)
+    try:
+        OUT_DIR.mkdir(parents=True, exist_ok=True)
+        with open(
+            OUTPUT_FILE, "w", encoding="utf-8"
+        ) as f:
+            json.dump(legal_cards, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"Error writing output file: {e}")
 
     return counts
 
 
 def identify_paper_constructed_cards():
-    with open("data/raw/atomiccards.json", "r", encoding="utf-8") as f:
+    with open(RAW_DATA_FILE, "r", encoding="utf-8") as f:
         raw = json.load(f)
 
-    data = raw.get("data", raw)  # some MTGJSON files nest under "data"
+
+    data = raw.get("data", raw)  # card data nests under "data"
     counts = process_cards(data)
     print_card_counts(counts)
 

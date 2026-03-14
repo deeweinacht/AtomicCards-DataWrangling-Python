@@ -1,5 +1,5 @@
 data/raw/
-data/curated/atomiccards_paper_constructed.json
+data/selected/
 plan.md
 test.py
  *.ipynb_checkpoints
@@ -11,3 +11,4 @@ test.py
 .pytest_cache/
 __pycache__/
 .vscode/
+
