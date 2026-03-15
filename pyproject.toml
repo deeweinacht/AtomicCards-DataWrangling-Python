@@ -5,5 +5,7 @@ description = "End-to-end data preparation pipeline for the MTGJSON AtomicCards 
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "pandas>=3.0.1",
+    "python-slugify>=8.0.4",
     "requests>=2.32.5",
 ]
