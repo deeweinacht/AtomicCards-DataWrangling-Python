@@ -1,5 +1,5 @@
 """
-Extract script to download and extract the MTGJSON AtomicCards dataset, verify its integrity, and save metadata about the extraction process.
+Downloads and extracts the MTGJSON AtomicCards dataset, including verifying the download integrity and saving metadata about the extraction process.
 """
 import hashlib
 import json
