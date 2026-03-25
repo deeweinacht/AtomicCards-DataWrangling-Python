@@ -1,5 +1,49 @@
 # AtomicCards-DataWrangling-Python
-A reproducible ETL pipeline that ingests MTGJSON AtomicCards data and exports normalized relational tables suitable for analytics workflows.
+A reproducible ETL pipeline that ingests MTGJSON AtomicCards data and exports normalized relational tables suitable for product analytics.
+
+Taking the full MTGJson dataset and preparing it for product analysis for MTG design teams.
+
+Problem:
+Game design / product analytics team needs reliable data to evaluate card balance, mechanics distribution, and long-term power creep. 
+
+Evaluating consistency and evolution of design over time:
+
+### Card Power Creep
+Has the power of cards increased over the history of the game?
+Are some sets, colors, card types more powerful than others?
+
+Example metrics:
+A. Stat Efficiency (creatures only)
+(power + toughness) / mana_cost
+B. Keyword Density
+number of keywords (flying, haste, etc.)
+proxy for complexity / strength
+C. Text Length
+crude, but correlates with complexity/power creep
+D. Mana Efficiency Buckets
+low-cost vs high-impact cards
+
+### Color Identity Stability
+Do colors maintain consistent identities?
+Are mechanics drifting between colors?
+Metrics:
+A. Mechanic frequency by color
+% of blue cards with flying, draw, etc.
+B. Color entropy (optional but impressive)
+how “spread out” mechanics are within a color
+C. Cross-color overlap
+how often mechanics appear outside their “home” color
+
+### Set Design Consistency
+Are sets internally consistent?
+Do some sets deviate significantly?
+
+Metrics:
+A. Avg CMC per set
+B. Avg keyword count
+C. Creature vs non-creature ratio
+D. Mechanic distribution
+
 
 ## WORK IN PROGRESS
 
@@ -14,32 +58,7 @@ setup/mac_linux.sh  # setup dependencies and virtual environment
 source .venv/bin/activate # activate virtual environment
 ```
 
-### Card Selection
 
-This project focuses on cards relevant to real-world deckbuilding in paper-constructed formats.
-The following inclusion and exclusion rules were applied to the MTGJSON AtomicCards dataset to produce the filtered subset atomiccards_legal.json.
-
-
-**Included**
-
-Cards are retained if they meet all of the following:
-
-Playable in at least one paper-constructed format
-(Commander, Oathbreaker, Standard, Pioneer, Modern, Legacy, Vintage, Pauper, Penny Dreadful, Premodern, or Old School)
-with legality status Legal or Restricted.
-
-Fully released, physical cards that can be used in a playable deck — not tokens, emblems, schemes, or other digital-only content.
-
-**Excluded**
-
-Cards were excluded if any of these conditions applied:
-
-- Humor/Acorn cards (isFunny=True) from Un-sets or other joke products.
-- Non-constructed layouts, including tokens, emblems, schemes, vanguards, planes, phenomena, attractions, stickers, or contraptions.
-- Conspiracy-type cards, which are draft-only mechanics and not used in constructed play.
-- Cards only printed in “Un-sets” (UGL, UNH, UNST, UND, UNF), even if technically legal in Commander or Legacy.
-    - Rationale: While some Un-set cards (e.g. from Unfinity) are Commander-legal, these sets were designed as experimental products that intentionally break normal mechanical and color-pie conventions.
-    - Excluding them improves dataset consistency for downstream analyses focused on color identity and core design patterns.
 
 ### Project Structure
 
@@ -47,6 +66,8 @@ Cards were excluded if any of these conditions applied:
 **docs** contains project documentation.
 **scripts** contains the python files that execute the pipeline.
 **setup** contains scripts for single-command setup of the environment.
+
+
 
 ### Data Source and Licensing
 

@@ -55,5 +55,6 @@ Loads the warehouse tables into a SQLite database to confirm relational integrit
 
 This step verifies that the final dataset can be used directly in a relational analytics environment.
 
-Outputs to /data/database
+## Example Queries
+**[product_analytic_queries.sql]**
 
