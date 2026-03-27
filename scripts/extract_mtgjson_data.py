@@ -1,6 +1,7 @@
 """
 Downloads and extracts the MTGJSON AtomicCards and SetList datasets, including verifying the download integrity and saving metadata about the extraction process.
 """
+
 import hashlib
 import json
 import lzma

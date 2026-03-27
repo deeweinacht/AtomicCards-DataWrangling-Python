@@ -1,16 +1,19 @@
 """
-Select script to identify cards that are legal in paper constructed formats, excluding those that are only digital, 
-have non-standard layouts or types, or are exclusively from unsets. 
+Select script to identify cards that are legal in paper constructed formats, excluding those that are only digital,
+have non-standard layouts or types, or are exclusively from unsets.
 The script reads the raw MTGJSON data, applies filtering criteria, and outputs a JSON file in the same format
 containing only the cards that meet the paper constructed legality requirements.
 After processing, it prints counts of how many cards were kept and how many were excluded for each reason.
 """
+
 import json
 from pathlib import Path
 
-RAW_DATA_FILE = Path("data/raw/atomiccards.json")
+RAW_ATOMIC_CARD_DATA_FILE = Path("data/raw/atomiccards.json")
+RAW_SET_LIST_DATA_FILE = Path("data/raw/setlist.json")
 OUT_DIR = Path("data/selected")
-OUTPUT_FILE = OUT_DIR.joinpath("atomiccards_paper_constructed.json")
+ATOMIC_CARD_OUTPUT_FILE = OUT_DIR.joinpath("atomiccards_paper_constructed.json")
+SET_LIST_OUTPUT_FILE = OUT_DIR.joinpath("setlist_paper_constructed.json")
 
 PAPER_FORMATS = {
     "commander",
@@ -35,9 +38,7 @@ NON_CONSTRUCTED_LAYOUTS = {
     "host",
     "augment",
 }
-NON_CONSTRUCTED_SUPERTYPES = {
-    "host"
-}
+NON_CONSTRUCTED_SUPERTYPES = {"host"}
 
 NON_CONSTRUCTED_TYPES = {
     "conspiracy",
@@ -51,20 +52,30 @@ NON_CONSTRUCTED_TYPES = {
     "see",
     "stickers",
     "universewalker",
-    "you'll"
+    "you'll",
 }
 
-NON_CONSTRUCTED_SUBTYPES = {
-    "attraction",
-    "contraption",
-    "dungeon"
+NON_CONSTRUCTED_SUBTYPES = {"attraction", "contraption", "dungeon"}
+
+
+UNSETS = {
+    "UGL",
+    "UNH",
+    "PUNH",
+    "UST",
+    "PUST",
+    "UND",
+    "UNF",
+    "SUNF",
+    "ULST",
+    "UNK",
+    "PUNK",
 }
 
-
-UNSETS = {"UGL", "UNH", "PUNH", "UST", "PUST",  "UND", "UNF", "SUNF", "ULST", "UNK", "PUNK"}
 
 def card_is_funny(faces) -> bool:
     return any(bool(face.get("isFunny")) for face in faces)
+
 
 def card_legal_any_paper_constructed(faces) -> bool:
     for face in faces:
@@ -92,7 +103,7 @@ def card_has_non_standard_type(faces) -> bool:
         types_list = face.get("types") or []
         if any(st.lower() in NON_CONSTRUCTED_TYPES for st in types_list):
             return True
-        
+
         subtypes_list = face.get("subtypes") or []
         if any(st.lower() in NON_CONSTRUCTED_SUBTYPES for st in subtypes_list):
             return True
@@ -107,6 +118,7 @@ def card_has_non_standard_type(faces) -> bool:
             print(f"Card '{face}' has non-standard subtype: {t}")
     return False
 
+
 def card_is_from_unset(faces) -> bool:
     for face in faces:
         printings = face.get("printings") or []
@@ -114,6 +126,7 @@ def card_is_from_unset(faces) -> bool:
             if printings[0] in UNSETS:
                 return True
     return False
+
 
 def print_card_counts(counts: dict):
     print(f"Total cards in source: {counts['total_cards']}")
@@ -128,7 +141,7 @@ def print_card_counts(counts: dict):
         "not_paper_legal:",
         counts["not_paper_legal"],
         "from_unset:",
-        counts["from_unset"]
+        counts["from_unset"],
     )
 
 
@@ -141,7 +154,7 @@ def process_cards(data: dict) -> dict:
         "nonstandard_layout": 0,
         "nonstandard_type": 0,
         "not_paper_legal": 0,
-        "from_unset": 0
+        "from_unset": 0,
     }
 
     for card_name, faces in data.items():
@@ -166,9 +179,7 @@ def process_cards(data: dict) -> dict:
 
     try:
         OUT_DIR.mkdir(parents=True, exist_ok=True)
-        with open(
-            OUTPUT_FILE, "w", encoding="utf-8"
-        ) as f:
+        with open(ATOMIC_CARD_OUTPUT_FILE, "w", encoding="utf-8") as f:
             json.dump(legal_cards, f, indent=2, ensure_ascii=False)
     except Exception as e:
         print(f"Error writing output file: {e}")
@@ -177,14 +188,50 @@ def process_cards(data: dict) -> dict:
 
 
 def identify_paper_constructed_cards():
-    with open(RAW_DATA_FILE, "r", encoding="utf-8") as f:
+    with open(RAW_ATOMIC_CARD_DATA_FILE, "r", encoding="utf-8") as f:
         raw = json.load(f)
-
 
     data = raw.get("data", raw)  # card data nests under "data"
     counts = process_cards(data)
     print_card_counts(counts)
 
 
+def print_set_counts(counts: dict):
+    print(f"Total sets in source: {counts['total_sets']}")
+    print(f"Kept (paper legal): {counts['kept']}")
+    print(f"Excluded — not paper legal: {counts['not_paper_legal']}")
+
+
+def process_sets(data: list) -> list:
+    legal_sets = []
+    counts = {"total_sets": len(data), "kept": 0, "not_paper_legal": 0}
+
+    for set in data:
+        if not set.get("isOnlineOnly", False):
+            legal_sets.append(set)
+            counts["kept"] += 1
+        else:
+            counts["not_paper_legal"] += 1
+
+    try:
+        OUT_DIR.mkdir(parents=True, exist_ok=True)
+        with open(SET_LIST_OUTPUT_FILE, "w", encoding="utf-8") as f:
+            json.dump(legal_sets, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"Error writing output file: {e}")
+
+    return counts
+
+
+def identify_paper_constructed_sets():
+    with open(RAW_SET_LIST_DATA_FILE, "r", encoding="utf-8") as f:
+        raw = json.load(f)
+
+    data = raw.get("data", raw)  # set data nests under "data"
+    counts = process_sets(data)
+    print_set_counts(counts)
+
+
 if __name__ == "__main__":
     identify_paper_constructed_cards()
+    identify_paper_constructed_sets()
