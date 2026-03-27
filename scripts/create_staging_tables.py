@@ -6,7 +6,8 @@ import pandas as pd
 from pathlib import Path
 
 
-SELECTED_DATA_FILE = Path("data/selected/atomiccards_paper_constructed.json")
+CARDS_PAPER_CONSTRUCTED_DATA = Path("data/selected/atomiccards_paper_constructed.json")
+SETS_PAPER_CONSTRUCTED_DATA = Path("data/selected/setlist_paper_constructed.json")
 OUT_DIR = Path("data/staging")
 REPORT = {}
 
@@ -49,7 +50,17 @@ STAGING_TABLE_SCHEMA = {
         "type_kind": "category",
         "type": "str",
     },
+    "sets": {
+        "id": "str",
+        "parent_set": "str",
+        "name": "str",
+        "release_date": "datetime64[ns]",
+        "block": "str",
+        "type": "category",
+        "total_cards": "Int64",
+    },
 }
+
 
 # Map for converting the different type categories in the source data to a consistent "type_kind" in the staging tables
 KIND_MAP = {"types": "type", "supertypes": "supertype", "subtypes": "subtype"}
@@ -141,15 +152,26 @@ def build_type_row(card_id: str, face_index: int, kind: str, type_value: str) ->
         "type": type_value,
     }
 
+def build_set_row(set: dict) -> dict:
+    return {
+        "id": set.get("code"),  # Use set code as unique ID
+        "parent_set": set.get("parentCode"),  # For sets that are part of a larger group
+        "name": set.get("name"),
+        "release_date": set.get("releaseDate"),
+        "block": set.get("block"),
+        "type": set.get("type"),
+        "total_cards": set.get("totalSetSize"),
+    }
 
-def create_staging_tables():
+def create_staging_dataframes():
     """Load card data from JSON and create initial DataFrames for staging tables."""
     card_rows = []
     faces_rows = []
     card_keyword_rows = []
     card_type_rows = []
+    set_rows = []
 
-    with open(SELECTED_DATA_FILE, "r", encoding="utf-8") as f:
+    with open(CARDS_PAPER_CONSTRUCTED_DATA, "r", encoding="utf-8") as f:
         raw = json.load(f)
 
     data = raw.get("data", raw)  # actual data nests under "data"
@@ -165,18 +187,20 @@ def create_staging_tables():
                 face_type_rows = build_types_rows(card_row["id"], i, face)
                 card_type_rows.extend(face_type_rows)
 
-    cards_df = pd.DataFrame(card_rows)
-    faces_df = pd.DataFrame(faces_rows)
-    keywords_df = pd.DataFrame(card_keyword_rows)
-    keywords_df = keywords_df.drop_duplicates()
-    types_df = pd.DataFrame(card_type_rows)
-    types_df = types_df.drop_duplicates()
+
+
+    with open(SETS_PAPER_CONSTRUCTED_DATA, "r", encoding="utf-8") as f:
+        raw_sets = json.load(f)
+    
+    for set in raw_sets:
+        set_rows.append(build_set_row(set))
 
     return {
-        "cards": cards_df,
-        "faces": faces_df,
-        "keywords": keywords_df,
-        "types": types_df,
+        "cards": pd.DataFrame(card_rows),
+        "faces": pd.DataFrame(faces_rows),
+        "keywords": pd.DataFrame(card_keyword_rows).drop_duplicates(),
+        "types": pd.DataFrame(card_type_rows).drop_duplicates(),
+        "sets": pd.DataFrame(set_rows),
     }
 
 
@@ -203,6 +227,7 @@ def handle_missing_values(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFram
                 "mana_cost",
                 "power",
                 "toughness",
+                "parent_set",
             ]:
                 # For string fields, we fill missing values with an empty string, except for certain fields where null likely indicates "not applicable" rather than a true empty value
                 dfs[table_type][column] = df[column].fillna("")
@@ -250,7 +275,7 @@ def apply_staging_schema(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame
     return dfs
 
 
-def sort_staging_tables(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
+def sort_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     """Sort staging tables for consistency."""
 
     if "cards" in dfs:
@@ -271,10 +296,12 @@ def sort_staging_tables(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]
             .sort_values(["card_id", "face_index", "type_kind", "type"])
             .reset_index(drop=True)
         )
+    if "sets" in dfs:
+        dfs["sets"] = dfs["sets"].sort_values("id").reset_index(drop=True)
     return dfs
 
 
-def validate_staging_tables(dfs: dict[str, pd.DataFrame]) -> dict:
+def validate_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict:
     """Validate staging tables against schema requirements."""
 
     validation_passed = True
@@ -359,6 +386,13 @@ def validate_staging_tables(dfs: dict[str, pd.DataFrame]) -> dict:
             validation_failures.append(
                 "Combination of card_id, face_index, type_kind, and type in types table must be unique."
             )
+    if "sets" in dfs:
+        if "id" not in dfs["sets"].columns:
+            validation_failures.append("Sets table must have an 'id' column.")
+        if dfs["sets"]["id"].isnull().any():
+            validation_failures.append("Sets table must not have null 'id' values.")
+        if not dfs["sets"]["id"].is_unique:
+            validation_failures.append("Set IDs must be unique.")
 
     if validation_failures:
         validation_passed = False
@@ -398,16 +432,16 @@ def save_staging_report():
 
 
 if __name__ == "__main__":
-    # Run ETL pipeline
-    staging_dfs = create_staging_tables()
+    # create and validate staging tables
+    staging_dfs = create_staging_dataframes()
 
     staging_dfs = handle_missing_values(staging_dfs)
 
     staging_dfs = apply_staging_schema(staging_dfs)
 
-    staging_dfs = sort_staging_tables(staging_dfs)
+    staging_dfs = sort_staging_dataframes(staging_dfs)
 
-    validation_results = validate_staging_tables(staging_dfs)
+    validation_results = validate_staging_dataframes(staging_dfs)
 
     save_staging_tables(staging_dfs)
 

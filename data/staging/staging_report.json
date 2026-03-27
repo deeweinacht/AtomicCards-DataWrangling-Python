@@ -6,8 +6,9 @@
   "row_counts": {
     "cards": 30600,
     "faces": 31361,
-    "keywords": 21702,
-    "types": 68780
+    "keywords": 21703,
+    "types": 68780,
+    "sets": 795
   },
   "total_errors": 0
 }
