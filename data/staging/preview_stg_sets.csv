@@ -3,7 +3,6 @@ id,parent_set,name,release_date,block,type,total_cards
 2ED,,Unlimited Edition,1993-12-01,Core Set,core,302
 2X2,,Double Masters 2022,2022-07-08,,masters,579
 2XM,,Double Masters,2020-08-07,,masters,384
-30A,,30th Anniversary Edition,2022-11-28,,memorabilia,594
 3ED,,Revised Edition,1994-04-11,Core Set,core,306
 40K,,"Warhammer 40,000 Commander",2022-10-07,Commander,commander,617
 4BB,4ED,Fourth Edition Foreign Black Border,1995-04-01,,core,378
@@ -15,57 +14,20 @@ id,parent_set,name,release_date,block,type,total_cards
 8ED,,Eighth Edition,2003-07-28,Core Set,core,711
 9ED,,Ninth Edition,2005-07-29,Core Set,core,710
 A25,,Masters 25,2018-03-16,,masters,249
-AACR,ACR,Assassin's Creed Art Series,2024-07-05,,memorabilia,20
-AAFR,AFR,Adventures in the Forgotten Realms Art Series,2021-07-23,,memorabilia,81
-ABLB,BLB,Bloomburrow Art Series,2024-08-02,,memorabilia,54
-ABRO,BRO,The Brothers' War Art Series,2022-11-18,,memorabilia,81
-ACLB,CLB,Battle for Baldur's Gate Art Series,2022-06-10,,memorabilia,81
-ACMM,CMM,Commander Masters Art Series,2023-08-04,,memorabilia,81
 ACR,,Assassin's Creed,2024-07-05,,draft_innovation,309
-ADFT,DFT,Aetherdrift Art Series,2025-02-14,,memorabilia,54
-ADMU,DMU,Dominaria United Art Series,2022-09-09,,memorabilia,81
-ADSK,DSK,Duskmourn: House of Horror Art Series,2024-09-27,,memorabilia,54
-AECL,ECL,Lorwyn Eclipsed Art Series,2026-01-23,,memorabilia,0
-AEOE,EOE,Edge of Eternities Art Series,2025-08-01,,memorabilia,54
 AER,,Aether Revolt,2017-01-20,Kaladesh,expansion,197
 AFC,AFR,Forgotten Realms Commander,2021-07-23,Commander,commander,331
-AFDN,FDN,Foundations Art Series,2024-11-15,,memorabilia,55
-AFIC,FIC,Final Fantasy Scene Box,2025-12-05,,memorabilia,24
-AFIN,FIN,Final Fantasy Art Series,2025-06-13,,memorabilia,53
 AFR,,Adventures in the Forgotten Realms,2021-07-23,,expansion,402
-AINR,INR,Innistrad Remastered Art Series,2025-01-24,,memorabilia,25
 AKH,,Amonkhet,2017-04-28,Amonkhet,expansion,287
-AKHM,KHM,Kaldheim Art Series,2021-02-05,,memorabilia,81
 ALA,,Shards of Alara,2008-10-03,Alara,expansion,250
-ALCI,LCI,The Lost Caverns of Ixalan Art Series,2023-11-17,,memorabilia,81
 ALL,,Alliances,1996-06-10,Ice Age,expansion,199
-ALTC,LTC,Tales of Middle-earth Scene Box,2023-11-04,,memorabilia,24
-ALTR,LTR,Tales of Middle-earth Art Series,2023-06-23,,memorabilia,81
-AMH1,MH1,Modern Horizons Art Series,2019-06-05,,memorabilia,54
-AMH2,MH2,Modern Horizons 2 Art Series,2021-06-18,,memorabilia,162
-AMH3,MH3,Modern Horizons 3 Art Series,2024-06-14,,memorabilia,54
-AMID,MID,Midnight Hunt Art Series,2021-09-24,Innistrad: Double Feature,memorabilia,81
-AMKM,MKM,Murders at Karlov Manor Art Series,2024-02-09,,memorabilia,49
-AMOM,MOM,March of the Machine Art Series,2023-04-21,,memorabilia,81
-ANEO,NEO,Neon Dynasty Art Series,2022-02-18,,memorabilia,81
-AONE,ONE,Phyrexia: All Will Be One Art Series,2023-02-03,,memorabilia,81
-AOTJ,OTJ,Outlaws of Thunder Junction Art Series,2024-04-19,,memorabilia,54
 APC,,Apocalypse,2001-06-04,Invasion,expansion,143
 ARB,,Alara Reborn,2009-04-30,Alara,expansion,145
 ARC,,Archenemy,2010-06-18,,archenemy,150
 ARN,,Arabian Nights,1993-12-17,,expansion,92
-ASNC,SNC,New Capenna Art Series,2022-04-29,,memorabilia,81
-ASPM,,Marvel's Spider-Man Art Series,2025-09-26,,memorabilia,54
-ASTX,STX,Strixhaven Art Series,2021-04-23,,memorabilia,162
-ATDM,TDM,Tarkir: Dragonstorm Art Series,2025-04-11,,memorabilia,54
 ATH,,Anthologies,1998-11-01,,box,85
-ATLA,TLA,Avatar: the Last Airbender Art Series,2025-11-21,,memorabilia,54
-ATLE,TLE,Avatar: the Last Airbender Eternal Art Series,2025-11-21,,memorabilia,12
 ATQ,,Antiquities,1994-03-04,,expansion,102
-AVOW,VOW,Crimson Vow Art Series,2021-11-19,Innistrad: Double Feature,memorabilia,81
 AVR,,Avacyn Restored,2012-05-04,Innistrad,expansion,244
-AWOE,WOE,Wilds of Eldraine Art Series,2023-09-08,,memorabilia,81
-AZNR,ZNR,Zendikar Rising Art Series,2020-09-25,,memorabilia,81
 BBD,,Battlebond,2018-06-08,,draft_innovation,256
 BCHR,CHR,Chronicles Foreign Black Border,1995-07-01,,masters,125
 BFZ,,Battle for Zendikar,2015-10-02,Battle for Zendikar,expansion,299
@@ -91,11 +53,49 @@ C20,,Commander 2020,2020-04-17,Commander,commander,322
 C21,,Commander 2021,2021-04-23,Commander,commander,409
 CC1,,Commander Collection: Green,2020-12-04,,arsenal,8
 CC2,,Commander Collection: Black,2022-01-28,,arsenal,8
-CED,,Collectors' Edition,1993-12-10,,memorabilia,302
-CEI,,Intl. Collectors' Edition,1993-12-10,,memorabilia,302
 CHK,,Champions of Kamigawa,2004-10-01,Kamigawa,expansion,307
 CHR,,Chronicles,1995-07-01,,masters,125
 CLB,,Commander Legends: Battle for Baldur's Gate,2022-06-10,Commander,draft_innovation,936
 CLU,MKM,Ravnica: Clue Edition,2024-02-23,,draft_innovation,284
 CM1,,Commander's Arsenal,2012-11-02,Commander,arsenal,18
 CM2,,Commander Anthology Volume II,2018-06-08,Commander,commander,312
+CMA,,Commander Anthology,2017-06-09,Commander,commander,320
+CMB1,,Mystery Booster Playtest Cards 2019,2019-11-07,,funny,121
+CMB2,,Mystery Booster Playtest Cards 2021,2021-08-20,,funny,121
+CMD,,Commander 2011,2011-06-17,Commander,commander,318
+CMM,,Commander Masters,2023-08-04,Commander,masters,1067
+CMR,,Commander Legends,2020-11-20,Commander,draft_innovation,718
+CN2,,Conspiracy: Take the Crown,2016-08-26,Conspiracy,draft_innovation,222
+CNS,,Conspiracy,2014-06-06,Conspiracy,draft_innovation,210
+CON,,Conflux,2009-02-06,Alara,expansion,145
+CP1,M15,Magic 2015 Clash Pack,2014-07-18,,starter,6
+CP2,FRF,Fate Reforged Clash Pack,2015-01-23,Khans of Tarkir,starter,6
+CP3,ORI,Magic Origins Clash Pack,2015-07-17,,starter,6
+CSP,,Coldsnap,2006-07-21,Ice Age,expansion,155
+CST,CSP,Coldsnap Theme Decks,2006-07-21,Ice Age,box,62
+DBL,,Innistrad: Double Feature,2022-01-28,,draft_innovation,535
+DCI,,DCI Promos,2006-01-01,,promo,80
+DD1,,Duel Decks: Elves vs. Goblins,2007-11-16,,duel_deck,62
+DD2,,Duel Decks: Jace vs. Chandra,2008-11-07,,duel_deck,64
+DD3,,Duel Decks: Anthology,2014-12-05,,duel_deck,0
+DDC,,Duel Decks: Divine vs. Demonic,2009-04-10,,duel_deck,62
+DDD,,Duel Decks: Garruk vs. Liliana,2009-10-30,,duel_deck,63
+DDE,,Duel Decks: Phyrexia vs. the Coalition,2010-03-19,,duel_deck,71
+DDF,,Duel Decks: Elspeth vs. Tezzeret,2010-09-03,,duel_deck,79
+DDG,,Duel Decks: Knights vs. Dragons,2011-04-01,,duel_deck,81
+DDH,,Duel Decks: Ajani vs. Nicol Bolas,2011-09-02,,duel_deck,80
+DDI,,Duel Decks: Venser vs. Koth,2012-03-30,,duel_deck,77
+DDJ,,Duel Decks: Izzet vs. Golgari,2012-09-07,,duel_deck,90
+DDK,,Duel Decks: Sorin vs. Tibalt,2013-03-15,,duel_deck,80
+DDL,,Duel Decks: Heroes vs. Monsters,2013-09-06,,duel_deck,81
+DDM,,Duel Decks: Jace vs. Vraska,2014-03-14,,duel_deck,88
+DDN,,Duel Decks: Speed vs. Cunning,2014-09-05,,duel_deck,81
+DDO,,Duel Decks: Elspeth vs. Kiora,2015-02-27,,duel_deck,65
+DDP,,Duel Decks: Zendikar vs. Eldrazi,2015-08-28,,duel_deck,75
+DDQ,,Duel Decks: Blessed vs. Cursed,2016-02-26,,duel_deck,76
+DDR,,Duel Decks: Nissa vs. Ob Nixilis,2016-09-02,,duel_deck,70
+DDS,,Duel Decks: Mind vs. Might,2017-03-31,,duel_deck,65
+DDT,,Duel Decks: Merfolk vs. Goblins,2017-10-24,,duel_deck,63
+DDU,,Duel Decks: Elves vs. Inventors,2018-04-06,,duel_deck,76
+DFT,,Aetherdrift,2025-02-14,,expansion,553
+DGM,,Dragon's Maze,2013-05-03,Return to Ravnica,expansion,156

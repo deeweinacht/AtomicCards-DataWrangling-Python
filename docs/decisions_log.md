@@ -25,6 +25,12 @@ Cards were excluded if any of these conditions applied:
     - Rationale: While some Un-set cards (e.g. from Unfinity) are Commander-legal, these sets were designed as experimental products that intentionally break normal mechanical and color-pie conventions.
     - Excluding them improves dataset consistency for downstream analyses focused on color identity and core design patterns.
 
+## Set Selection
+
+Excluded only sets that are definitively not for paper constructed play:
+- flagged "Online Only"
+- set types "memorabilia" (art cards), "tokens" (temporary indicators), or "minigames" (separate product from MTG)
+
 ## Staging Tables
 
 Core challenge - the product has had many layout variations of cards over it's 30-year history, cards with multiple faces.

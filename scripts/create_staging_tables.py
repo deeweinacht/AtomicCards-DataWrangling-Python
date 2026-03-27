@@ -448,5 +448,5 @@ if __name__ == "__main__":
     save_staging_report()
 
     print(
-        "Staging tables created successfully. See staging_report.json for details on any issues encountered during processing."
+        "Staging tables created successfully. See staging_report.json for details about any issues encountered during processing."
     )

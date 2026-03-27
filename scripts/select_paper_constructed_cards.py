@@ -207,7 +207,7 @@ def process_sets(data: list) -> list:
     counts = {"total_sets": len(data), "kept": 0, "not_paper_legal": 0}
 
     for set in data:
-        if not set.get("isOnlineOnly", False):
+        if not set.get("isOnlineOnly", False) and set.get("type", "").lower() not in {"memorabilia", "token", "minigame"}:
             legal_sets.append(set)
             counts["kept"] += 1
         else:
