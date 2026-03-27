@@ -1,0 +1,13 @@
+{
+  "missing_value_errors": [],
+  "schema_errors": [],
+  "validation_passed": true,
+  "validation_failures": [],
+  "row_counts": {
+    "cards": 30600,
+    "faces": 31361,
+    "keywords": 21702,
+    "types": 68780
+  },
+  "total_errors": 0
+}

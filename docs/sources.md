@@ -5,6 +5,7 @@
 **Source:** [MTGJSON](https://mtgjson.com/)  
 **Download Link:** [All Files](https://mtgjson.com/downloads/all-files/)  
 **License:** [MIT License](https://mtgjson.com/license/)
+**Version:** compatible with MTGJSON version 5.3
 
 ### Copyright and License Notice
 

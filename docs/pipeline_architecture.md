@@ -23,17 +23,13 @@ This step reduces the full dataset to the subset relevant for deckbuilding and g
 
 Outputs to /data/selected
 
-**[normalize_paper_constructed_cards.py]**
+**[created_staging_tables.py]**
 Normalizes the curated JSON dataset into structured pandas DataFrames then saves into Parquet files.
 
 This step flattens the nested AtomicCards structure and prepares tables representing cards, faces, types, and keywords.
 
 Outputs to /data/staging.
 
-**[validate_staging.py]**
-Validates the normalization did not introduce data discrepencies.
-
-Outputs to /logs
 
 **[build_warehouse_tables.py]**
 Creates analytics-ready tables by adding derived features, flags, and analysis-friendly fields.
@@ -41,11 +37,6 @@ Creates analytics-ready tables by adding derived features, flags, and analysis-f
 Outputs both CSV and Parquet versions for compatibility with common analytics tools.
 
 Outputs to /data/warehouse
-
-**[validate_warehouse.py]**
-Validates the  derived features and warehouse-level business logic.
-
-Outputs to /logs
 
 
 ## Load
