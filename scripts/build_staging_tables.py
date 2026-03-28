@@ -11,60 +11,18 @@ SETS_PAPER_CONSTRUCTED_DATA = Path("data/selected/setlist_paper_constructed.json
 OUT_DIR = Path("data/staging")
 REPORT = {}
 
-# Defines the expected column types for each staging table
-STAGING_TABLE_SCHEMA = {
-    "cards": {
-        "id": "str",
-        "color_identity": "object",
-        "edh_rec_rank": "Int64",
-        "has_alt_deck_limit": "bool",
-        "is_game_changer": "bool",
-        "is_reserved": "bool",
-        "layout": "object",
-        "legalities": "object",
-        "mana_value": "Int64",
-        "name": "str",
-        "printings": "object",
-        "rulings": "object",
-    },
-    "faces": {
-        "card_id": "str",
-        "face_index": "Int64",
-        "name": "str",
-        "side": "category",
-        "color_indicator": "object",
-        "colors": "object",
-        "defense": "str",
-        "mana_value": "str",
-        "loyalty": "str",
-        "mana_cost": "str",
-        "power": "str",
-        "text": "str",
-        "toughness": "str",
-        "type": "str",
-    },
-    "keywords": {"card_id": "str", "face_index": "Int64", "keyword": "str"},
-    "types": {
-        "card_id": "str",
-        "face_index": "Int64",
-        "type_kind": "category",
-        "type": "str",
-    },
-    "sets": {
-        "id": "str",
-        "parent_set": "str",
-        "name": "str",
-        "release_date": "datetime64[ns]",
-        "block": "str",
-        "type": "category",
-        "total_cards": "Int64",
-    },
-}
+SCHEMAS_FILE = Path("docs/schemas.json")
+STAGING_SCHEMA = {}
 
 
 # Map for converting the different type categories in the source data to a consistent "type_kind" in the staging tables
 KIND_MAP = {"types": "type", "supertypes": "supertype", "subtypes": "subtype"}
 
+def load_staging_schema() -> None:
+    global STAGING_SCHEMA
+    with open(SCHEMAS_FILE, "r", encoding="utf-8") as f:
+        table_schemas = json.load(f)
+    STAGING_SCHEMA = table_schemas["staging_tables"]
 
 def build_card_row(card_name: str, faces: list) -> dict:
     # For simplicity, card-level fields are taken from the first face, as these should be consistent across faces.
@@ -207,7 +165,7 @@ def create_staging_dataframes():
 def handle_missing_values(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     """Handle missing values in staging tables according to business rules."""
     missing_value_errors = []
-    for table_type, table_definition in STAGING_TABLE_SCHEMA.items():
+    for table_type, table_definition in STAGING_SCHEMA.items():
         df = dfs.get(table_type)
         if df is None:
             missing_value_errors.append(
@@ -244,7 +202,7 @@ def handle_missing_values(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFram
 def apply_staging_schema(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
     """Apply type conversions to match the staging schema."""
     schema_errors = []
-    for table_type, table_definition in STAGING_TABLE_SCHEMA.items():
+    for table_type, table_definition in STAGING_SCHEMA.items():
         for column, dtype in table_definition.items():
             df = dfs.get(table_type)
             if df is None:
@@ -433,6 +391,9 @@ def save_staging_report():
 
 if __name__ == "__main__":
     # create and validate staging tables
+
+    load_staging_schema()
+
     staging_dfs = create_staging_dataframes()
 
     staging_dfs = handle_missing_values(staging_dfs)

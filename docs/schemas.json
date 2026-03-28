@@ -1,0 +1,50 @@
+{
+    "staging_tables": {
+        "cards": {
+            "id": "str",
+            "color_identity": "object",
+            "edh_rec_rank": "Int64",
+            "has_alt_deck_limit": "bool",
+            "is_game_changer": "bool",
+            "is_reserved": "bool",
+            "layout": "object",
+            "legalities": "object",
+            "mana_value": "Int64",
+            "name": "str",
+            "printings": "object",
+            "rulings": "object"
+        },
+        "faces": {
+            "card_id": "str",
+            "face_index": "Int64",
+            "name": "str",
+            "side": "category",
+            "color_indicator": "object",
+            "colors": "object",
+            "defense": "str",
+            "mana_value": "str",
+            "loyalty": "str",
+            "mana_cost": "str",
+            "power": "str",
+            "text": "str",
+            "toughness": "str",
+            "type": "str"
+        },
+        "keywords": {"card_id": "str", "face_index": "Int64", "keyword": "str"},
+        "types": {
+            "card_id": "str",
+            "face_index": "Int64",
+            "type_kind": "category",
+            "type": "str"
+        },
+        "sets": {
+            "id": "str",
+            "parent_set": "str",
+            "name": "str",
+            "release_date": "datetime64[ns]",
+            "block": "str",
+            "type": "category",
+            "total_cards": "Int64"
+        }
+    }
+}

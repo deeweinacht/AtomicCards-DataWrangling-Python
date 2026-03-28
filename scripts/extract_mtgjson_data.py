@@ -28,7 +28,6 @@ DATASETS = [
 
 OUT_DIR = Path("data/raw")
 
-
 def download_file(url: str, path: Path):
     request = requests.get(url, stream=True)
     request.raise_for_status()

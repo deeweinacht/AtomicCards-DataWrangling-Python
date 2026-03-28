@@ -26,18 +26,17 @@ Outputs to /data/selected
 **[created_staging_tables.py]**
 Normalizes the curated JSON dataset into structured pandas DataFrames then saves into Parquet files.
 
-This step flattens the nested AtomicCards structure and prepares tables representing cards, faces, types, and keywords.
+This step flattens the nested AtomicCards structure and prepares tables representing cards, faces, types, keywords, and sets.
 
 Outputs to /data/staging.
 
 
-**[build_warehouse_tables.py]**
-Creates analytics-ready tables by adding derived features, flags, and analysis-friendly fields.
+**[build_analytics_tables.py]**
+Creates analytics-ready warehouse tables by adding derived features, flags, and analysis-friendly fields.
 
 Outputs both CSV and Parquet versions for compatibility with common analytics tools.
 
 Outputs to /data/warehouse
-
 
 ## Load
 
