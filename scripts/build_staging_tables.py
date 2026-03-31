@@ -59,8 +59,6 @@ def build_face_row(card_id: str, index: int, face: dict) -> dict:
     face_row["side"] = face.get(
         "side"
     )  # for cards with multiple faces, e.g. "a" or "b"
-
-    face_row["color_indicator"] = face.get("colorIndicator")
     face_row["colors"] = face.get("colors")
     face_row["defense"] = face.get("defense")  # only present on battle card types
     face_row["mana_value"] = (
@@ -78,13 +76,14 @@ def build_face_row(card_id: str, index: int, face: dict) -> dict:
     return face_row
 
 
-def build_keyword_rows(card_id: str, face_index: int, face: dict) -> list:
+def build_keyword_rows(card_id: str, faces: list) -> list:
+    # For simplicity, keywords are taken from the first face, as these are consistent across faces.
+    front_face = faces[0] if len(faces) > 0 else {}
     keyword_rows = []
-    keywords = face.get("keywords") or []
+    keywords = front_face.get("keywords") or []
     for keyword in keywords:
         keyword_row = {
             "card_id": card_id,  # Foreign key to card table
-            "face_index": face_index,
             "keyword": keyword,
         }
         keyword_rows.append(keyword_row)
@@ -137,11 +136,12 @@ def create_staging_dataframes():
         card_row: dict | None = build_card_row(card_name, faces)
         if card_row is not None:
             card_rows.append(card_row)
+            keyword_rows = build_keyword_rows(card_row["id"], faces)
+            card_keyword_rows.extend(keyword_rows)
             for i, face in enumerate(faces):
                 face_row = build_face_row(card_row["id"], i, face)
                 faces_rows.append(face_row)
-                face_keyword_rows = build_keyword_rows(card_row["id"], i, face)
-                card_keyword_rows.extend(face_keyword_rows)
+
                 face_type_rows = build_types_rows(card_row["id"], i, face)
                 card_type_rows.extend(face_type_rows)
 
@@ -245,7 +245,7 @@ def sort_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFr
     if "keywords" in dfs:
         dfs["keywords"] = (
             dfs["keywords"]
-            .sort_values(["card_id", "face_index", "keyword"])
+            .sort_values(["card_id", "keyword"])
             .reset_index(drop=True)
         )
     if "types" in dfs:
@@ -291,27 +291,19 @@ def validate_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict:
     if "keywords" in dfs:
         if "card_id" not in dfs["keywords"].columns:
             validation_failures.append("Keywords table must have a 'card_id' column.")
-        if "face_index" not in dfs["keywords"].columns:
-            validation_failures.append(
-                "Keywords table must have a 'face_index' column."
-            )
         if "keyword" not in dfs["keywords"].columns:
             validation_failures.append("Keywords table must have a 'keyword' column.")
         if dfs["keywords"]["card_id"].isnull().any():
             validation_failures.append(
                 "Keywords table must not have null 'card_id' values."
             )
-        if dfs["keywords"]["face_index"].isnull().any():
-            validation_failures.append(
-                "Keywords table must not have null 'face_index' values."
-            )
         if dfs["keywords"]["keyword"].isnull().any():
             validation_failures.append(
                 "Keywords table must not have null 'keyword' values."
             )
-        if dfs["keywords"][["card_id", "face_index", "keyword"]].duplicated().any():
+        if dfs["keywords"][["card_id", "keyword"]].duplicated().any():
             validation_failures.append(
-                "Combination of card_id, face_index, and keyword in keywords table must be unique."
+                "Combination of card_id and keyword in keywords table must be unique."
             )
     if "types" in dfs:
         if "card_id" not in dfs["types"].columns:
