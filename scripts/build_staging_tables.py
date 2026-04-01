@@ -343,8 +343,7 @@ def save_staging_report():
         json.dump(REPORT, f, indent=2)
     print(f"Staging report saved to {report_path}")
 
-
-if __name__ == "__main__":
+def build_staging_tables():
     # create and validate staging tables
 
     load_staging_schema()
@@ -371,3 +370,6 @@ if __name__ == "__main__":
     print(
         "Staging tables created successfully. See staging_report.json for details about any issues encountered during processing."
     )
+
+if __name__ == "__main__":
+    build_staging_tables()

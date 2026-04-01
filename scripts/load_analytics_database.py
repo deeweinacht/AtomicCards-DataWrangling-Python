@@ -1,7 +1,6 @@
 import duckdb
 from pathlib import Path
-
-from pyarrow import json
+import json
 
 WAREHOUSE_DIR = Path("data/warehouse")
 SCHEMAS_FILE = Path("docs/schemas.json")
@@ -22,6 +21,9 @@ def load_table_schemas() -> None:
         global TABLE_SCHEMAS
         TABLE_SCHEMAS = json.load(f) 
 
-if __name__ == "__main__":
+def load_analytics_database():
     load_table_schemas()
     load_analytics_tables()
+
+if __name__ == "__main__":
+    load_analytics_database()

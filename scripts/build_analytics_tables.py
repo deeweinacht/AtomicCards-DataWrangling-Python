@@ -41,7 +41,7 @@ def read_staging_tables(input_dir: Path) -> Dict[str, pd.DataFrame]:
             report["read_errors"].append(f"Missing staging file for {table}")
     return dfs
 
-def build_analytics_tables(dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
+def build_tables(dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
     """
     Build analytics tables from staging.
     """
@@ -218,11 +218,11 @@ def save_warehouse_report(report: Dict[str, Any], output_dir: Path) -> None:
     with open(report_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, default=str)
 
-if __name__ == "__main__":
+def build_analytics_tables():
     load_table_schemas()
     staging_dfs = read_staging_tables(INPUT_DIR)
     validate_staging_dataframes(staging_dfs)
-    analytics_dfs = build_analytics_tables(staging_dfs)
+    analytics_dfs = build_tables(staging_dfs)
     schema_validation_results = validate_analytics_schema(analytics_dfs)
 
     print(
@@ -233,4 +233,6 @@ if __name__ == "__main__":
     save_analytics_tables(analytics_dfs, OUTPUT_DIR)
     save_warehouse_report(report, OUTPUT_DIR)
     print("Analytics tables built successfully. See warehouse_report.json for details.")
-    
+
+if __name__ == "__main__":
+    build_analytics_tables()

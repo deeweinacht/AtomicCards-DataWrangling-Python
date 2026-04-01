@@ -155,7 +155,6 @@ adriana-captain-of-the-guard,Melee
 adric-mathematical-genius,Doctor's companion
 adric-mathematical-genius,Ultimate Sacrifice
 adrix-and-nev-twincasters,Ward
-adrix-and-nev-twincasters-adrix-and-nev-twincasters,Ward
 adult-gold-dragon,Flying
 adult-gold-dragon,Haste
 adult-gold-dragon,Lifelink
@@ -202,7 +201,6 @@ aeronaut-admiral,Flying
 aeronaut-cavalry,Flying
 aeronaut-s-wings,Equip
 aesi-tyrant-of-gyre-strait,Landfall
-aesi-tyrant-of-gyre-strait-aesi-tyrant-of-gyre-strait,Landfall
 aesthir-glider,Flying
 aether-chaser,First strike
 aether-figment,Kicker
@@ -652,7 +650,6 @@ animate-wall,Enchant
 animating-faerie-bring-to-life,Flying
 animist-s-awakening,Spell mastery
 anje-falkenrath,Haste
-anje-falkenrath-anje-falkenrath,Haste
 anje-s-ravager,Madness
 ankle-biter,Deathtouch
 ankle-shanker,Haste
@@ -1722,7 +1719,6 @@ bird-admirer-wing-shredder,Nightbound
 bird-admirer-wing-shredder,Reach
 bird-maiden,Flying
 birds-of-paradise,Flying
-birds-of-paradise-birds-of-paradise,Flying
 birthing-hulk,Devoid
 bishop-of-rebirth,Vigilance
 bishop-s-soldier,Lifelink
@@ -1858,9 +1854,6 @@ blightreaper-thallid-blightsower-thallid,Transform
 blightsteel-colossus,Indestructible
 blightsteel-colossus,Infect
 blightsteel-colossus,Trample
-blightsteel-colossus-blightsteel-colossus,Indestructible
-blightsteel-colossus-blightsteel-colossus,Infect
-blightsteel-colossus-blightsteel-colossus,Trample
 blightwidow,Infect
 blightwidow,Reach
 blightwing-bandit,Deathtouch
@@ -1999,7 +1992,6 @@ blooming-blast,Gift
 blooming-blast,Treasure
 blooming-stinger,Deathtouch
 bloomvine-regent-claim-territory,Flying
-bloomvine-regent-claim-territory-bloomvine-regent-claim-territory,Flying
 blossom-prancer,Reach
 blossombind,Enchant
 blossoming-calm,Rebound
@@ -3073,7 +3065,6 @@ chronomantic-escape,Suspend
 chronozoa,Flying
 chronozoa,Vanishing
 chulane-teller-of-tales,Vigilance
-chulane-teller-of-tales-chulane-teller-of-tales,Vigilance
 chupacabra-echo,Fathomless descent
 cid-freeflier-pilot,Jump
 cid-timeless-artificer,Cycling
@@ -3123,7 +3114,6 @@ clandestine-meddler,Surveil
 clara-oswald,Doctor's companion
 clara-oswald,Impossible Girl
 clarion-conqueror,Flying
-clarion-conqueror-clarion-conqueror,Flying
 clash-of-the-eikons,Fight
 clash-of-titans,Fight
 clattering-skeletons,Venture into the dungeon
@@ -3984,8 +3974,6 @@ darksteel-brute,Indestructible
 darksteel-citadel,Indestructible
 darksteel-colossus,Indestructible
 darksteel-colossus,Trample
-darksteel-colossus-darksteel-colossus,Indestructible
-darksteel-colossus-darksteel-colossus,Trample
 darksteel-gargoyle,Flying
 darksteel-gargoyle,Indestructible
 darksteel-garrison,Fortify
@@ -4698,22 +4686,13 @@ dragonkin-berserker,First strike
 dragonlair-spider,Reach
 dragonlord-atarka,Flying
 dragonlord-atarka,Trample
-dragonlord-atarka-dragonlord-atarka,Flying
-dragonlord-atarka-dragonlord-atarka,Trample
 dragonlord-dromoka,Flying
 dragonlord-dromoka,Lifelink
-dragonlord-dromoka-dragonlord-dromoka,Flying
-dragonlord-dromoka-dragonlord-dromoka,Lifelink
 dragonlord-kolaghan,Flying
 dragonlord-kolaghan,Haste
-dragonlord-kolaghan-dragonlord-kolaghan,Flying
-dragonlord-kolaghan-dragonlord-kolaghan,Haste
 dragonlord-ojutai,Flying
-dragonlord-ojutai-dragonlord-ojutai,Flying
 dragonlord-silumgar,Deathtouch
 dragonlord-silumgar,Flying
-dragonlord-silumgar-dragonlord-silumgar,Deathtouch
-dragonlord-silumgar-dragonlord-silumgar,Flying
 dragonscale-general,Bolster
 dragonsguard-elite,Magecraft
 dragonshift,Overload
@@ -5518,7 +5497,6 @@ essence-of-orthodoxy,Flying
 essence-of-orthodoxy,Incubate
 essence-of-orthodoxy,Transform
 estrid-the-masked,Mill
-estrid-the-masked-estrid-the-masked,Mill
 etali-primal-conqueror-etali-primal-sickness,Indestructible
 etali-primal-conqueror-etali-primal-sickness,Trample
 etali-primal-conqueror-etali-primal-sickness,Transform
@@ -6734,7 +6712,6 @@ geyserfield-stalker,Menace
 ghalma-s-warden,Metalcraft
 ghalta-and-mavren,Trample
 ghalta-primal-hunger,Trample
-ghalta-primal-hunger-ghalta-primal-hunger,Trample
 ghalta-stampede-tyrant,Trample
 ghastbark-twins,Trample
 ghastly-conscription,Manifest
@@ -8925,7 +8902,6 @@ izzet-staticaster,Flash
 izzet-staticaster,Haste
 j-jonah-jameson,Treasure
 jace-beleren,Mill
-jace-beleren-jace-beleren,Mill
 jace-memory-adept,Mill
 jace-mirror-mage,Kicker
 jace-mirror-mage,Scry
@@ -9651,7 +9627,6 @@ krang-utrom-warlord,Haste
 krang-utrom-warlord,Indestructible
 krang-utrom-warlord,Trample
 krark-the-thumbless,Partner
-krark-the-thumbless-krark-the-thumbless,Partner
 krasis-incubation,Enchant
 kratos-god-of-war,Double strike
 kratos-stoic-father,Partner
@@ -10447,7 +10422,6 @@ magmatic-core,Cumulative upkeep
 magmatic-galleon,Crew
 magmatic-galleon,Treasure
 magmatic-hellkite,Flying
-magmatic-hellkite-magmatic-hellkite,Flying
 magmatic-sinkhole,Delve
 magmatic-sprinter,Haste
 magnifying-glass,Investigate
@@ -10576,7 +10550,6 @@ map-the-wastes,Bolster
 maraleaf-pixie,Flying
 maralen-fae-ascendant,Flying
 marang-river-regent-coil-and-catch,Flying
-marang-river-regent-coil-and-catch-marang-river-regent-coil-and-catch,Flying
 marang-river-skeleton,Megamorph
 marauder-s-axe,Equip
 marauding-brinefang,Cycling
@@ -10766,7 +10739,6 @@ mechanical-mobster,Connive
 mechanized-production,Enchant
 mechanozoa,Warp
 mechtitan-core,Crew
-mechtitan-core-mechtitan-core,Crew
 meddling-youths,Haste
 meddling-youths,Investigate
 meditation-puzzle,Convoke
@@ -12109,8 +12081,6 @@ ojutai-soul-of-winter,Flying
 ojutai-soul-of-winter,Vigilance
 okaun-eye-of-chaos,Partner
 okaun-eye-of-chaos,Partner with
-okaun-eye-of-chaos-okaun-eye-of-chaos,Partner
-okaun-eye-of-chaos-okaun-eye-of-chaos,Partner with
 oketra-s-attendant,Cycling
 oketra-s-attendant,Embalm
 oketra-s-attendant,Flying
@@ -12492,10 +12462,6 @@ parhelion-ii,Crew
 parhelion-ii,First strike
 parhelion-ii,Flying
 parhelion-ii,Vigilance
-parhelion-ii-parhelion-ii,Crew
-parhelion-ii-parhelion-ii,First strike
-parhelion-ii-parhelion-ii,Flying
-parhelion-ii-parhelion-ii,Vigilance
 parhelion-patrol,Flying
 parhelion-patrol,Mentor
 parhelion-patrol,Vigilance
@@ -12560,7 +12526,6 @@ pawpatch-formation,Food
 pawpatch-recruit,Offspring
 pawpatch-recruit,Trample
 peacewalker-colossus,Crew
-peacewalker-colossus-peacewalker-colossus,Crew
 pearl-dragon,Flying
 pearl-ear-imperial-advisor,Lifelink
 pearl-lake-ancient,Flash
@@ -13686,8 +13651,6 @@ reckless-wurm,Madness
 reckless-wurm,Trample
 reckoner-bankbuster,Crew
 reckoner-bankbuster,Treasure
-reckoner-bankbuster-reckoner-bankbuster,Crew
-reckoner-bankbuster-reckoner-bankbuster,Treasure
 reclaim-the-wastes,Kicker
 reclusive-artificer,Haste
 recon-craft-theta,Crew
@@ -14447,7 +14410,6 @@ sail-into-the-west,Will of the council
 sailor-of-means,Treasure
 sailors-bane,Ward
 sakashima-of-a-thousand-faces,Partner
-sakashima-of-a-thousand-faces-sakashima-of-a-thousand-faces,Partner
 sakashima-s-protege,Cascade
 sakashima-s-protege,Flash
 sakashima-s-student,Ninjutsu
@@ -14678,8 +14640,6 @@ scavenged-weaponry,Enchant
 scavenger-drake,Flying
 scavenger-regent-exude-toxin,Flying
 scavenger-regent-exude-toxin,Ward
-scavenger-regent-exude-toxin-scavenger-regent-exude-toxin,Flying
-scavenger-regent-exude-toxin-scavenger-regent-exude-toxin,Ward
 scavenger-s-talent,Food
 scavenger-s-talent,Mill
 scavenging-harpy,Flying
@@ -15940,8 +15900,6 @@ smuggler-s-buggy,Crew
 smuggler-s-buggy,Hideaway
 smuggler-s-copter,Crew
 smuggler-s-copter,Flying
-smuggler-s-copter-smuggler-s-copter,Crew
-smuggler-s-copter-smuggler-s-copter,Flying
 smuggler-s-share,Treasure
 smuggler-s-surprise,Mill
 smuggler-s-surprise,Spree
@@ -18711,7 +18669,6 @@ ulamog-s-nullifier,Flash
 ulamog-s-nullifier,Flying
 ulamog-s-reclaimer,Devoid
 ulamog-the-ceaseless-hunger,Indestructible
-ulamog-the-ceaseless-hunger-ulamog-the-ceaseless-hunger,Indestructible
 ulamog-the-defiler,Ward
 ulamog-the-infinite-gyre,Annihilator
 ulamog-the-infinite-gyre,Indestructible
@@ -20479,8 +20436,6 @@ zinnia-valley-s-voice,Flying
 zirda-the-dawnwaker,Companion
 zndrsplt-eye-of-wisdom,Partner
 zndrsplt-eye-of-wisdom,Partner with
-zndrsplt-eye-of-wisdom-zndrsplt-eye-of-wisdom,Partner
-zndrsplt-eye-of-wisdom-zndrsplt-eye-of-wisdom,Partner with
 zoanthrope,Flying
 zoanthrope,Ravenous
 zoanthrope,Ward

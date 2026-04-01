@@ -102,10 +102,12 @@ def extract(outdir: Path, dataset: dict):
     print(f"{dataset['name']} extraction complete")
     print(f"JSON saved to {json_path}")
 
-
-if __name__ == "__main__":
+def extract_mtgjson_datasets():
     print("Extracting MTGJSON datasets...")
     for dataset in DATASETS:
         print(f"\nProcessing {dataset['name']}...")
         extract(OUT_DIR, dataset)
     print("\nAll extractions complete.")
+
+if __name__ == "__main__":
+    extract_mtgjson_datasets()

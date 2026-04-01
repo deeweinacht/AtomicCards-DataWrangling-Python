@@ -37,7 +37,7 @@ NON_CONSTRUCTED_LAYOUTS = {
     "planar",
     "host",
     "augment",
-    "reversible" #  technically a constructed-legal layout, but these are reprints of existing cards and would result in duplicates in the database
+    "reversible_card" #  technically a constructed-legal layout, but these are reprints of existing cards and would result in duplicates in the database
 }
 NON_CONSTRUCTED_SUPERTYPES = {"host"}
 
@@ -188,7 +188,7 @@ def process_cards(data: dict) -> dict:
     return counts
 
 
-def identify_paper_constructed_cards():
+def select_cards():
     with open(RAW_ATOMIC_CARD_DATA_FILE, "r", encoding="utf-8") as f:
         raw = json.load(f)
 
@@ -224,7 +224,7 @@ def process_sets(data: list) -> list:
     return counts
 
 
-def identify_paper_constructed_sets():
+def select_sets():
     with open(RAW_SET_LIST_DATA_FILE, "r", encoding="utf-8") as f:
         raw = json.load(f)
 
@@ -232,7 +232,9 @@ def identify_paper_constructed_sets():
     counts = process_sets(data)
     print_set_counts(counts)
 
+def select_paper_constructed():
+    select_cards()
+    select_sets()
 
 if __name__ == "__main__":
-    identify_paper_constructed_cards()
-    identify_paper_constructed_sets()
+    select_paper_constructed()
