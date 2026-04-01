@@ -20,6 +20,7 @@ Cards were excluded if any of these conditions applied:
 
 - Humor/Acorn cards (isFunny=True) from Un-sets or other joke products.
 - Non-constructed layouts, including tokens, emblems, schemes, vanguards, planes, phenomena, attractions, stickers, or contraptions.
+- "reversible" layouts - which are reprints of existing cards, with the same card on both faces, but with different art. These would result in duplicates in the dataset.
 - Conspiracy-type cards, which are draft-only mechanics and not used in constructed play.
 - Cards only printed in “Un-sets” (UGL, UNH, UNST, UND, UNF), even if technically legal in Commander or Legacy.
     - Rationale: While some Un-set cards (e.g. from Unfinity) are Commander-legal, these sets were designed as experimental products that intentionally break normal mechanical and color-pie conventions.
@@ -33,11 +34,13 @@ Excluded only sets that are definitively not for paper constructed play:
 
 ## Staging Tables
 
-Core challenge - the product has had many layout variations of cards over it's 30-year history, cards with multiple faces.
+Core challenge - the product has had many layout variations of cards over it's 30-year history, including cards with multiple faces.
 
 The cleanest way to handle this was to create separate tables for a grain of card and a grain of face. Each card is related to one or more faces.
 The allows clean analysis of features that are inherent to the entire physical card, as well as features that are face-specific.
 
-Some numeric fields (e.g. power, toughness) are generally numeric, but sometimes are variable (e.g. "*+1), therefore these fields are maintained as strings in the staging tables
+Some fields (e.g. power, toughness) are generally numeric, but sometimes are variable (e.g. "*+1), therefore these fields are maintained as strings in the staging tables
 
 ## Warehouse Tables
+
+Added numeric columns for fields (e.g. power, toughness) that are generally numeric and added flag columns to indicate where the values are not numeric and are instead variable.

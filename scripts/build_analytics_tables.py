@@ -55,7 +55,7 @@ def build_analytics_tables(dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFra
 
 def build_analytics_faces(staging_df: pd.DataFrame) -> pd.DataFrame:
     """
-    Derive analytics for card faces: power, toughness, loyalty, defense, mana_cost, pt_ratio, has_data_inconsistency.
+    Derive analytics for card faces: power, toughness, loyalty, defense, mana_cost, pt_ratio.
     """
     analytics_df = staging_df.copy()
     analytics_df["power_num"] = pd.to_numeric(analytics_df["power"], errors="coerce").astype("Float64")

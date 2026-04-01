@@ -37,6 +37,7 @@ NON_CONSTRUCTED_LAYOUTS = {
     "planar",
     "host",
     "augment",
+    "reversible" #  technically a constructed-legal layout, but these are reprints of existing cards and would result in duplicates in the database
 }
 NON_CONSTRUCTED_SUPERTYPES = {"host"}
 

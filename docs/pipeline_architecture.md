@@ -40,11 +40,16 @@ Outputs to /data/warehouse
 
 ## Load
 
-**[load_sqlite_database.py]**
-Loads the warehouse tables into a SQLite database to confirm relational integrity and SQL compatibility.
+**[load_analytics_database.py]**
+The analytics tables are exposed in DuckDB by registering Parquet-backed views.
 
-This step verifies that the final dataset can be used directly in a relational analytics environment.
+This provides a SQL query layer without duplicating storage, enabling efficient analytical queries over columnar data.
 
 ## Example Queries
-**[product_analytic_queries.sql]**
+
+**[color_identity.sql]**
+**[power_creep.sql]**
+**[set_consistency.sql]**
+
+Querying the DuckDB views to answer product and design questions.
 
