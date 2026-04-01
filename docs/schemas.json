@@ -82,8 +82,7 @@
             "is_legal_pauper": "bool",
             "legalities": "object",
             "printings": "object",
-            "rulings": "object",
-            "has_data_inconsistency": "bool"
+            "rulings": "object"
         },
         "card_faces": {
             "card_id": "str",
@@ -114,10 +113,9 @@
             "is_green": "bool",
             "pt_ratio": "Float64",
             "type": "str",
-            "text": "str",
-            "has_data_inconsistency": "bool"
+            "text": "str"
         },
-        "keywords": {"card_id": "str", "face_index": "Int64", "keyword": "str"},
+        "keywords": {"card_id": "str", "keyword": "str"},
         "types": {
             "card_id": "str",
             "face_index": "Int64",
@@ -131,8 +129,7 @@
             "release_date": "datetime64[ns]",
             "block": "str",
             "type": "category",
-            "total_cards": "Int64",
-            "has_data_inconsistency": "bool"
+            "total_cards": "Int64"
         }
     }
 }

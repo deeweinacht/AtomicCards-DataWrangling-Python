@@ -1,0 +1,11 @@
+{
+  "schema_validation_passed": true,
+  "schema_validation_failures": [],
+  "row_counts": {
+    "card_faces": 31361,
+    "cards": 30600,
+    "keywords": 20553,
+    "types": 68780,
+    "sets": 662
+  }
+}

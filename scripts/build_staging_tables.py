@@ -264,85 +264,48 @@ def validate_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict:
 
     validation_passed = True
     validation_failures = []
-    if "cards" in dfs:
-        if "id" not in dfs["cards"].columns:
-            validation_failures.append("Cards table must have an 'id' column.")
-        if dfs["cards"]["id"].isnull().any():
-            validation_failures.append("Cards table must not have null 'id' values.")
-        if not dfs["cards"]["id"].is_unique:
-            validation_failures.append("Card IDs must be unique.")
-    if "faces" in dfs:
-        if "card_id" not in dfs["faces"].columns:
-            validation_failures.append("Faces table must have a 'card_id' column.")
-        if "face_index" not in dfs["faces"].columns:
-            validation_failures.append("Faces table must have a 'face_index' column.")
-        if dfs["faces"]["card_id"].isnull().any():
+    for table_type, table_definition in STAGING_SCHEMA.items():
+        df = dfs.get(table_type)
+        if df is None:
             validation_failures.append(
-                "Faces table must not have null 'card_id' values."
+                f'Expected staging table "{table_type}" is missing.'
             )
-        if dfs["faces"]["face_index"].isnull().any():
-            validation_failures.append(
-                "Faces table must not have null 'face_index' values."
-            )
-        if dfs["faces"][["card_id", "face_index"]].duplicated().any():
-            validation_failures.append(
-                "Combination of card_id and face_index in faces table must be unique."
-            )
-    if "keywords" in dfs:
-        if "card_id" not in dfs["keywords"].columns:
-            validation_failures.append("Keywords table must have a 'card_id' column.")
-        if "keyword" not in dfs["keywords"].columns:
-            validation_failures.append("Keywords table must have a 'keyword' column.")
-        if dfs["keywords"]["card_id"].isnull().any():
-            validation_failures.append(
-                "Keywords table must not have null 'card_id' values."
-            )
-        if dfs["keywords"]["keyword"].isnull().any():
-            validation_failures.append(
-                "Keywords table must not have null 'keyword' values."
-            )
-        if dfs["keywords"][["card_id", "keyword"]].duplicated().any():
-            validation_failures.append(
-                "Combination of card_id and keyword in keywords table must be unique."
-            )
-    if "types" in dfs:
-        if "card_id" not in dfs["types"].columns:
-            validation_failures.append("Types table must have a 'card_id' column.")
-        if "face_index" not in dfs["types"].columns:
-            validation_failures.append("Types table must have a 'face_index' column.")
-        if "type_kind" not in dfs["types"].columns:
-            validation_failures.append("Types table must have a 'type_kind' column.")
-        if "type" not in dfs["types"].columns:
-            validation_failures.append("Types table must have a 'type' column.")
-        if dfs["types"]["card_id"].isnull().any():
-            validation_failures.append(
-                "Types table must not have null 'card_id' values."
-            )
-        if dfs["types"]["face_index"].isnull().any():
-            validation_failures.append(
-                "Types table must not have null 'face_index' values."
-            )
-        if dfs["types"]["type_kind"].isnull().any():
-            validation_failures.append(
-                "Types table must not have null 'type_kind' values."
-            )
-        if dfs["types"]["type"].isnull().any():
-            validation_failures.append("Types table must not have null 'type' values.")
-        if (
-            dfs["types"][["card_id", "face_index", "type_kind", "type"]]
-            .duplicated()
-            .any()
-        ):
-            validation_failures.append(
-                "Combination of card_id, face_index, type_kind, and type in types table must be unique."
-            )
-    if "sets" in dfs:
-        if "id" not in dfs["sets"].columns:
-            validation_failures.append("Sets table must have an 'id' column.")
-        if dfs["sets"]["id"].isnull().any():
-            validation_failures.append("Sets table must not have null 'id' values.")
-        if not dfs["sets"]["id"].is_unique:
-            validation_failures.append("Set IDs must be unique.")
+            continue # if the table is missing, we can't run any further validations on it, so we skip to the next table
+        for column, dtype in table_definition.items():
+            if column not in df.columns:
+                validation_failures.append(
+                    f'Expected column "{column}" is missing from {table_type} staging table.'
+                )
+                continue # if the column is missing, we can't run any further validations on it, so we skip to the next column
+            if df[column].dtype != dtype:
+                validation_failures.append(
+                    f'Column "{column}" in {table_type} staging table has incorrect type. Expected {dtype}, got {df[column].dtype}.'
+                )
+            if column in ["id", "card_id", "face_index"] and df[column].isnull().any():
+                validation_failures.append(
+                    f'Column "{column}" in {table_type} staging table must not have null values.'
+                )
+
+    if dfs["cards"]["id"].duplicated().any():
+        validation_failures.append(
+            "id column in cards table must have unique values."
+        )
+
+    if dfs["faces"][["card_id", "face_index"]].duplicated().any():
+        validation_failures.append(
+            "Combination of card_id and face_index in faces table must be unique."
+        )
+
+    if dfs["keywords"][["card_id", "keyword"]].duplicated().any():
+        validation_failures.append(
+            "Combination of card_id and keyword in keywords table must be unique."
+        )
+    
+
+    if (dfs["types"][["card_id", "face_index", "type_kind", "type"]].duplicated().any()):
+        validation_failures.append(
+            "Combination of card_id, face_index, type_kind, and type in types table must be unique."
+        )
 
     if validation_failures:
         validation_passed = False
@@ -395,6 +358,11 @@ if __name__ == "__main__":
     staging_dfs = sort_staging_dataframes(staging_dfs)
 
     validation_results = validate_staging_dataframes(staging_dfs)
+
+    print(
+        "Staging tables validation results:",
+        json.dumps(validation_results, indent=2),
+    )
 
     save_staging_tables(staging_dfs)
 
