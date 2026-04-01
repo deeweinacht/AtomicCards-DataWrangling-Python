@@ -3,10 +3,12 @@ A reproducible ETL pipeline that ingests MTGJSON AtomicCards data and exports no
 
 Taking the full MTGJson dataset and preparing it for product analysis for MTG design teams.
 
-Problem:
-Game design / product analytics team needs reliable data to evaluate card balance, mechanics distribution, and long-term power creep. 
+# WORK IN PROGRESS
 
-Evaluating consistency and evolution of design over time:
+
+## Problem Statement:
+The game design / product analytics team needs a reliable card-design analytics layer to monitor how card characteristics evolve across releases, evaluate whether color identities remain distinct, and identify sets that deviate from expected design patterns.
+
 
 ### Card Power Creep
 Has the power of cards increased over the history of the game?
@@ -45,7 +47,7 @@ C. Creature vs non-creature ratio
 D. Mechanic distribution
 
 
-## WORK IN PROGRESS
+
 
 ## Quickstart
 ```bash
