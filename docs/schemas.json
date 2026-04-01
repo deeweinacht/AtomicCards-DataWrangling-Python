@@ -103,7 +103,6 @@
             "power_is_variable": "bool",
             "toughness_is_variable": "bool",
             "loyalty_is_variable": "bool",
-            "defense_is_variable": "bool",
             "mana_cost_is_variable": "bool",
             "is_colorless": "bool",
             "is_white": "bool",

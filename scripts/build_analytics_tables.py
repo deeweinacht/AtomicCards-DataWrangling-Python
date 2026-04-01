@@ -61,11 +61,10 @@ def build_analytics_faces(staging_df: pd.DataFrame) -> pd.DataFrame:
     analytics_df["power_num"] = pd.to_numeric(analytics_df["power"], errors="coerce").astype("Float64")
     analytics_df["toughness_num"] = pd.to_numeric(analytics_df["toughness"], errors="coerce").astype("Float64")
     analytics_df["loyalty_num"] = pd.to_numeric(analytics_df["loyalty"], errors="coerce").astype("Float64")
-    analytics_df["defense_num"] = pd.to_numeric(analytics_df["defense"], errors="coerce").astype("Float64")
+    analytics_df["defense_num"] = pd.to_numeric(analytics_df["defense"], errors="coerce").astype("Float64") # never variable, so the variable flag is not added for this one
     analytics_df["power_is_variable"] = (analytics_df["power"].notnull() & analytics_df["power_num"].isnull())
     analytics_df["toughness_is_variable"] = (analytics_df["toughness"].notnull() & analytics_df["toughness_num"].isnull())
     analytics_df["loyalty_is_variable"] = (analytics_df["loyalty"].notnull() & analytics_df["loyalty_num"].isnull())
-    analytics_df["defense_is_variable"] = (analytics_df["defense"].notnull() & analytics_df["defense_num"].isnull())
     analytics_df["mana_cost_is_variable"] = analytics_df["mana_cost"].str.contains(r"[XYZ\*]", case=False, na=False)
     analytics_df["pt_ratio"] = analytics_df["power_num"] / analytics_df["toughness_num"].astype("Float64")
 
@@ -83,25 +82,20 @@ def build_analytics_cards(cards_df: pd.DataFrame, faces_df: pd.DataFrame, types_
     """
     Derive analytics for cards: colors, text, types, printings from faces/joins.
     """
-    cards = {
-            "id": "str",
-            "color_identity": "object",
-            "edh_rec_rank": "Int64",
-            "has_alt_deck_limit": "bool",
-            "is_game_changer": "bool",
-            "is_reserved": "bool",
-            "layout": "category",
-            "legalities": "object",
-            "mana_value": "Int64",
-            "name": "str",
-            "printings": "object",
-            "rulings": "object"
-        }
-    analytics_df = cards_df.copy()
+    # Rename 'id' to 'card_id' so it matches the results of our groupbys and joins from other tables
+    analytics_df = cards_df.copy().rename(columns={"id": "card_id"}).set_index("card_id")
 
     analytics_df["face_count"] = faces_df.groupby("card_id")["face_index"].nunique().astype("Int64")
-    analytics_df["text_length"] = faces_df.groupby("card_id")["text"].apply(lambda texts: sum(len(t) for t in texts if isinstance(t, str))).astype("Int64")
-    analytics_df["text_tokens"] = faces_df.groupby("card_id")["text"].apply(lambda texts: sum(len(t.split()) for t in texts if isinstance(t, str))).astype("Int64")
+    analytics_df["text_length"] = (
+        faces_df["text"].str.len()
+        .groupby(faces_df["card_id"]).sum()
+        .astype("Int64")
+    )
+    analytics_df["text_tokens"] = (
+        faces_df["text"].str.split().apply(len)
+        .groupby(faces_df["card_id"]).sum()
+        .astype("Int64")
+    )
     analytics_df["type_count"] = types_df.groupby("card_id")["type"].nunique().astype("Int64")
     analytics_df["keyword_count"] = keywords_df.groupby("card_id")["keyword"].nunique().astype("Int64")
     analytics_df["legalities_count"] = analytics_df["legalities"].apply(lambda x: len([v for v in x.values() if v in ("Legal", "Restricted")]) if x is not None else 0).astype("Int64")
@@ -111,41 +105,38 @@ def build_analytics_cards(cards_df: pd.DataFrame, faces_df: pd.DataFrame, types_
     analytics_df["is_legal_modern"] = analytics_df["legalities"].apply(lambda x: x.get("modern") in ("Legal", "Restricted") if x is not None else False).astype("bool")
     analytics_df["is_legal_pauper"] = analytics_df["legalities"].apply(lambda x: x.get("pauper") in ("Legal", "Restricted") if x is not None else False).astype("bool")
     analytics_df["is_legal_legacy"] = analytics_df["legalities"].apply(lambda x: x.get("legacy") in ("Legal", "Restricted") if x is not None else False).astype("bool")
-    analytics_df["is_legendary"] = types_df.groupby("card_id")["type"].apply(lambda types: any(t.lower() == "legendary" for t in types) if types is not None else False).astype("bool")
 
     # determine legendary status by checking if any type for the card contains "legendary" (case-insensitive)
-    types_df["temp_legendary_flag"] = types_df["type"].str.lower() == "legendary"
-    temp_legendary_map = types_df.groupby("card_id")["temp_legendary_flag"].any()
-    analytics_df["is_legendary"] = analytics_df["id"].map(temp_legendary_map).fillna(False).astype("bool")
+    temp_legendary_id_map = types_df[types_df["type"].str.lower() == "legendary"]["card_id"].unique()
+    analytics_df["is_legendary"] = analytics_df.index.isin(temp_legendary_id_map)
 
     # determine card colors by summarizing color flags from faces
-    temp_color_summary = faces_df.groupby("card_id").agg({
-        "is_white": "any",
-        "is_blue": "any",
-        "is_black": "any",
-        "is_red": "any",
-        "is_green": "any",
-        "is_colorless": "all"
-    })
-    analytics_df = analytics_df.merge(
-        temp_color_summary, 
-        left_on="id", 
-        right_index=True, 
-        how="left"
-    )
-    analytics_df["is_mono"] = (analytics_df[["is_white", "is_blue", "is_black", "is_red", "is_green"]].sum(axis=1) == 1).astype("bool")
-    analytics_df["is_multi"] = (analytics_df[["is_white", "is_blue", "is_black", "is_red", "is_green"]].sum(axis=1) > 1).astype("bool")
-    analytics_df["color_count"] = analytics_df[["is_white", "is_blue", "is_black", "is_red", "is_green"]].sum(axis=1).astype("Int64")
+    temp_color_cols = ["is_white", "is_blue", "is_black", "is_red", "is_green"]
+    temp_color_summary = faces_df.groupby("card_id")[temp_color_cols].any()
+    analytics_df = analytics_df.join(temp_color_summary)
+    
+    # derive color metrics from color flags
+    analytics_df["color_count"] = analytics_df[temp_color_cols].sum(axis=1).astype("Int64")
+    analytics_df["is_colorless"] = (analytics_df["color_count"] == 0).astype("bool")
+    analytics_df["is_mono"] = (analytics_df["color_count"] == 1).astype("bool")
+    analytics_df["is_multi"] = (analytics_df["color_count"] > 1).astype("bool")
 
     # determine first printing set and date by exploding printings and joining with sets to find earliest release date
-    analytics_df["printings"] = analytics_df["printings"].apply(lambda x: x.tolist() if x is not None else [])
-    temp_printings = analytics_df[["id", "printings"]].explode("printings").rename(columns={"id":"card_id", "printings":"set_id"})
-    temp_printings = temp_printings.merge(sets_df[["id", "release_date"]], left_on="set_id", right_on="id", how="left")
-    temp_mapping = temp_printings.dropna(subset=["release_date"]).sort_values(["card_id", "release_date"]).drop_duplicates("card_id", keep="first").set_index("card_id")
-    analytics_df["first_printing_set"] = analytics_df["id"].map(temp_mapping["set_id"])
-    analytics_df["first_printing_date"] = analytics_df["id"].map(temp_mapping["release_date"])
+    temp_exploded_printings = analytics_df["printings"].explode().rename("set_id")
+    temp_printings_with_dates = (
+        pd.DataFrame(temp_exploded_printings)
+        .join(sets_df.set_index("id")[["release_date"]], on="set_id")
+    )
+    temp_first_printings = (
+        temp_printings_with_dates.dropna(subset=["release_date"])
+        .sort_values(["card_id", "release_date"])
+        .groupby(level=0)  # Groups by the 'card_id' index
+        .first()           # Grabs the earliest record for each ID
+    )
+    analytics_df["first_printing_set"] = temp_first_printings["set_id"]
+    analytics_df["first_printing_date"] = temp_first_printings["release_date"]
 
-    return analytics_df.sort_values("id").reset_index(drop=True)
+    return analytics_df.reset_index().rename(columns={"card_id": "id"}).sort_values("id")
 
 def build_analytics_keywords(keywords_df: pd.DataFrame) -> pd.DataFrame:
     """
