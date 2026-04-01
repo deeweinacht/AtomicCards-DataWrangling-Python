@@ -8,12 +8,12 @@ This script runs the entire data pipeline:
 from extract_mtgjson_data import extract_mtgjson_datasets
 from select_paper_constructed_cards import select_paper_constructed
 from build_staging_tables import build_staging_tables
-from build_analytics_tables import build_analytics_tables
-from load_analytics_database import load_analytics_database
+from build_core_tables import build_warehouse_tables
+from load_into_analytics_database import load_warehouse_into_duckdb
 
 if __name__ == "__main__":
     # extract_mtgjson_datasets()
     select_paper_constructed()
     build_staging_tables()
-    build_analytics_tables()
-    load_analytics_database()
+    build_warehouse_tables()
+    load_warehouse_into_duckdb()

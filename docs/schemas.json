@@ -46,7 +46,7 @@
             "total_cards": "Int64"
         }
     },
-    "analytics_tables": {
+    "warehouse_tables": {
         "cards": {
             "id": "str",
             "name": "str",
