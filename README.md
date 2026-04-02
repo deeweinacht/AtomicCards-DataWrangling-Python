@@ -68,8 +68,7 @@ source .venv/bin/activate # activate virtual environment
 **docs** contains project documentation.
 **scripts** contains the python files that execute the pipeline.
 **setup** contains scripts for single-command setup of the environment.
-
-
+**sql** contains the sql files that structure the database and database queries.
 
 ### Data Source and Licensing
 
