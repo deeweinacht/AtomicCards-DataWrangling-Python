@@ -31,8 +31,8 @@ This step flattens the nested AtomicCards structure and prepares tables represen
 Outputs to /data/staging.
 
 
-**[build_analytics_tables.py]**
-Creates analytics-ready warehouse tables by adding derived features, flags, and analysis-friendly fields.
+**[build_core_tables.py]**
+Creates core analytics-ready warehouse tables by adding derived features, flags, and analysis-friendly fields.
 
 Outputs both CSV and Parquet versions for compatibility with common analytics tools.
 
@@ -40,16 +40,30 @@ Outputs to /data/warehouse
 
 ## Load
 
-**[load_analytics_database.py]**
-The analytics tables are exposed in DuckDB by registering Parquet-backed views.
+**[load_into_analytics_database.py]**
+The warehouse tables are exposed in DuckDB by registering Parquet-backed views.
 
-This provides a SQL query layer without duplicating storage, enabling efficient analytical queries over columnar data.
+This provides a SQL query layer without duplicating storage, enabling efficient analytical queries.
 
-## Example Queries
+**[add_semantic_layer.py]**
 
-**[color_identity.sql]**
-**[power_creep.sql]**
-**[set_consistency.sql]**
+Adds 4 semantic layer analytics views on top of the warehouse tables.
+
+- analytics.v_card_design_features
+    Grain: one row per card.
+    Purpose: reusable card-level design attributes for trend and complexity analysis.
+- analytics.v_creature_design_features
+    Grain: one row per valid creature face.
+    Purpose: creature-only efficiency and stat analysis.
+- analytics.v_color_mechanics
+    Grain: one row per card-mechanic observation.
+    Purpose: color identity and mechanic distribution analysis.
+- analytics.v_set_design_profile
+    Grain: one row per set.
+    Purpose: compact release-level fingerprint for consistency and design analysis.
+    Note: Set-level profiles are based on card membership in each printed set, not only original printings.
+
+## Query
 
 Querying the DuckDB views to answer product and design questions.
 

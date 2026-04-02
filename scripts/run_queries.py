@@ -1,8 +1,8 @@
 import duckdb
 from pathlib import Path
 
-DB_PATH = Path("data/warehouse/analytics.duckdb")
-SQL_DIR = Path("sql_queries")
+DB_PATH = Path("data/analytics/product_and_design_analytics.duckdb")
+QUERIES_DIR = Path("sql/queries")
 
 def run_query_file(con, file_path):
     query = file_path.read_text(encoding="utf-8")
@@ -25,7 +25,7 @@ def run_queries():
     for sql_file in sorted(SQL_DIR.glob("*.sql")):
         run_query_file(con, sql_file)
     '''
-    run_query_file(con, SQL_DIR.joinpath("test.sql"))
+    run_query_file(con, QUERIES_DIR.joinpath("test.sql"))
 
 if __name__ == "__main__":
     run_queries()
