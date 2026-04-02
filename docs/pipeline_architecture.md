@@ -61,7 +61,8 @@ Adds 4 semantic layer analytics views on top of the warehouse tables.
 - analytics.v_set_design_profile
     Grain: one row per set.
     Purpose: compact release-level fingerprint for consistency and design analysis.
-    Note: Set-level profiles are based on card membership in each printed set, not only original printings.
+    Note: Set-level profiles are based on card membership in any printed set, not only original printings.
+    Note: "_share" columns do not total to 100%, because cards can fit multiple categories (e.g. creature type and artifact type)
 
 ## Query
 
