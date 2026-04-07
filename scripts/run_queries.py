@@ -21,11 +21,9 @@ def run_query_file(con, file_path):
 def run_queries():
     con = duckdb.connect(DB_PATH)
 
-    ''''
-    for sql_file in sorted(SQL_DIR.glob("*.sql")):
+    for sql_file in sorted(QUERIES_DIR.glob("*.sql")):
         run_query_file(con, sql_file)
-    '''
-    run_query_file(con, QUERIES_DIR.joinpath("test.sql"))
+
 
 if __name__ == "__main__":
     run_queries()

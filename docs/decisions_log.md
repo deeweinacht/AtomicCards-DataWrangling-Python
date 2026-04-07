@@ -32,6 +32,9 @@ Excluded only sets that are definitively not for paper constructed play:
 - flagged "Online Only"
 - set types "memorabilia" (art cards), "tokens" (temporary indicators), or "minigames" (separate product from MTG)
 
+- Also removed the 'Media and Collaboration Promos' (PMEI) set because it causes issues with card release date analysis.
+ - The set was originally released in 1995, but continues to have new printings added to it, which makes it an outlier that skews analysis of card release trends over time.
+
 ## Staging Tables
 
 Core challenge - the product has had many layout variations of cards over it's 30-year history, including cards with multiple faces.
