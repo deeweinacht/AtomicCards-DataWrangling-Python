@@ -33,7 +33,7 @@ create or replace view analytics.v_card_design_features as
         cards.text_tokens as text_tokens,
         cards.rulings_count as rulings_count,
         cards.printings_count as printings_count,
-        coalesce(cards.text_tokens, 0) + coalesce(cards.rulings_count, 0) as complexity_score,
+        coalesce(cards.text_tokens, 0) + coalesce(cards.rulings_count*5, 0) as complexity_score,
         type_flags.is_creature_card as is_creature,
         type_flags.is_artifact_card as is_artifact,
         type_flags.is_enchantment_card as is_enchantment,
