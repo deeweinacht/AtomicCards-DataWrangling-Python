@@ -1,5 +1,6 @@
 -- Creates a design fingerprint for each expansion set by summarizing card complexity, mana value, color structure, and type prevalence within the set.
 -- Expansion sets are primarily where new cards and mechanics are introduced, so this provides a way to track how design trends evolve at the set level over time. 
+-- Note: type share values do not add up to 1.0 because cards may have multiple types.
 
 select 
     set_name,
