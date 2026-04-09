@@ -16,6 +16,7 @@ from build_staging_tables import validate_staging_dataframes
 
 INPUT_DIR = Path("data/staging")
 OUTPUT_DIR = Path("data/warehouse")
+PREVIEW_DIR = Path("data/output/previews")
 SCHEMAS_FILE = Path("data/schemas.json")
 TABLE_SCHEMAS = {}
 
@@ -307,11 +308,11 @@ def validate_warehouse_schema(analytics: Dict[str, pd.DataFrame]) -> Dict[str, A
     }
 
 
-def save_warehouse_tables(analytics: Dict[str, pd.DataFrame], output_dir: Path) -> None:
+def save_warehouse_tables(analytics: Dict[str, pd.DataFrame]) -> None:
     """
     Save warehouse tables to CSV and Parquet.
     """
-    output_dir.mkdir(parents=True, exist_ok=True)
+
     row_counts = {}
     for table, df in analytics.items():
         # CSV: stringify objects
@@ -320,20 +321,20 @@ def save_warehouse_tables(analytics: Dict[str, pd.DataFrame], output_dir: Path) 
             csv_df[col] = csv_df[col].apply(
                 lambda x: json.dumps(x) if isinstance(x, (dict, list)) else x
             )
-        csv_df.to_csv(output_dir / f"core_{table}.csv", index=False)
+        csv_df.head(100).to_csv(PREVIEW_DIR.joinpath(f"preview_core_{table}.csv"), index=False)
 
         # Parquet: keep objects
-        df.to_parquet(output_dir / f"core_{table}.parquet", index=False)
+        df.to_parquet(OUTPUT_DIR.joinpath(f"core_{table}.parquet"), index=False)
 
         row_counts[table] = len(df)
     report["row_counts"] = row_counts
 
 
-def save_warehouse_report(report: Dict[str, Any], output_dir: Path) -> None:
+def save_warehouse_report(report: Dict[str, Any]) -> None:
     """
     Save report to JSON.
     """
-    report_path = output_dir / "warehouse_report.json"
+    report_path = OUTPUT_DIR.joinpath("warehouse_report.json")
     with open(report_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, default=str)
 
@@ -350,8 +351,10 @@ def build_warehouse_tables():
         json.dumps(schema_validation_results, indent=2),
     )
 
-    save_warehouse_tables(analytics_dfs, OUTPUT_DIR)
-    save_warehouse_report(report, OUTPUT_DIR)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    PREVIEW_DIR.mkdir(parents=True, exist_ok=True)
+    save_warehouse_tables(analytics_dfs)
+    save_warehouse_report(report)
     print("Warehouse tables built successfully. See warehouse_report.json for details.")
 
 

@@ -30,8 +30,8 @@ Double strike,White,0.526,Red,0.462,0.064,78,111
 Delirium,Green,0.306,Black,0.242,0.064,62,73
 Crew,Blue,0.288,White,0.233,0.055,73,165
 Surveil,Blue,0.452,Black,0.4,0.052,115,186
-Flying,Blue,0.351,White,0.309,0.042,2265,2961
 Kicker,Green,0.248,Red,0.206,0.042,214,225
+Flying,Blue,0.351,White,0.309,0.042,2265,2961
 Defender,Blue,0.29,White,0.252,0.038,238,304
 Enchant,Blue,0.271,White,0.239,0.032,1157,1221
 Proliferate,Blue,0.354,Green,0.323,0.031,65,93
@@ -41,5 +41,5 @@ Transform,Black,0.217,White,0.205,0.012,258,380
 Partner,Blue,0.218,Black,0.207,0.011,87,129
 Equip,White,0.296,Red,0.285,0.011,186,561
 Typecycling,Blue,0.219,Red,0.219,0.0,64,78
-Suspend,Blue,0.219,Red,0.219,0.0,64,70
 Landcycling,Red,0.213,White,0.213,0.0,61,75
+Suspend,Blue,0.219,Red,0.219,0.0,64,70

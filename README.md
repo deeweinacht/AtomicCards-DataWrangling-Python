@@ -8,6 +8,9 @@ Taking the full MTGJson dataset and preparing it for product analysis for MTG de
 - exposed a reusable DuckDB semantic layer through views.
 - answered stakeholder questions with SQL that is interpretable and defensible.
 
+The project follows an ETL-style pipeline: raw MTGJSON files are extracted, filtered to the project’s analytical scope, transformed into curated staging and warehouse datasets, and then loaded into a DuckDB analytics layer implemented through views over parquet-backed outputs.
+
+
 # WORK IN PROGRESS
 
 
@@ -66,7 +69,6 @@ source .venv/bin/activate # activate virtual environment
 ```
 
 
-
 ### Project Structure
 
 **data** organizes the data in all stages of the pipeline.
@@ -74,6 +76,9 @@ source .venv/bin/activate # activate virtual environment
 **scripts** contains the python files that execute the pipeline.
 **setup** contains scripts for single-command setup of the environment.
 **sql** contains the sql files that structure the database and database queries.
+
+Large raw source files are excluded from version control. 
+Curated staging, warehouse, semantic, and final-query artifacts are included so reviewers can inspect outputs without rerunning the pipeline.
 
 ### Data Source and Licensing
 

@@ -1,5 +1,23 @@
 # Pipeline Architecture
 
+## Data Folder Structure
+
+data/
+  raw/        Original downloaded MTGJSON source files
+  selected/   Filtered source extracts restricted to paper-constructed scope
+  staging/    Intermediate normalized datasets used during transformation
+  warehouse/  Curated analytics-ready parquet outputs at stable business grains
+  analytics/  DuckDB database file used to expose the semantic/query layer
+  output/     Final query result exports and execution metadata
+
+## Naming Conventions
+
+Naming conventions:
+- stg_*: staging-layer datasets used for normalized intermediate transformations
+- core_*: warehouse-layer datasets at stable analytical grain
+- analytics.*: DuckDB semantic views built on top of core parquet-backed outputs
+- numbered SQL files: final business queries and semantic view definitions in deterministic review order
+
 ## Extract
 
 **[extract_mtgjson_atomic_cards.py](../scripts/extract_mtgjson_atomic_cards.py)** 
@@ -41,7 +59,7 @@ Outputs to /data/warehouse
 ## Load
 
 **[load_into_analytics_database.py]**
-The warehouse tables are exposed in DuckDB by registering Parquet-backed views.
+The pipeline loads curated warehouse outputs into a DuckDB-based analytics serving layer by registering core.* and analytics.* views over parquet-backed datasets.
 
 This provides a SQL query layer without duplicating storage, enabling efficient analytical queries.
 

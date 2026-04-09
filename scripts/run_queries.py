@@ -5,8 +5,7 @@ from pathlib import Path
 
 DB_PATH = Path("data/analytics/product_and_design_analytics.duckdb")
 QUERIES_DIR = Path("sql/queries")
-QUERY_OUTPUT_DIR = Path("data/output/query_results")
-LOG_OUTPUT_DIR = Path("data/output/metadata")
+OUTPUT_DIR = Path("data/output/query_results")
 
 
 def run_query_file(con, file_path):
@@ -23,7 +22,7 @@ def run_query_file(con, file_path):
     if result is not None:
         result.show()
         result.write_csv(
-            str(QUERY_OUTPUT_DIR.joinpath(f"{file_path.stem}.csv")), overwrite=True
+            str(OUTPUT_DIR.joinpath(f"{file_path.stem}.csv")), overwrite=True
         )
         return {
             "success": True,
@@ -47,7 +46,7 @@ def run_queries():
     query_run_logs["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     with open(
-        LOG_OUTPUT_DIR.joinpath("query_run_logs.json"), "w", encoding="utf-8"
+        OUTPUT_DIR.joinpath("query_run_logs.json"), "w", encoding="utf-8"
     ) as f:
         json.dump(query_run_logs, f, indent=2, ensure_ascii=False)
 

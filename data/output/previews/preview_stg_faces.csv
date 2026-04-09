@@ -1,0 +1,205 @@
+card_id,face_index,name,side,colors,defense,mana_value,loyalty,mana_cost,power,text,toughness,type
+2-mace,0,+2 Mace,,['W'],,2,,{1}{W},,"Equipped creature gets +2/+2.
+Equip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)",,Artifact — Equipment
+a-killer-among-us,0,A Killer Among Us,,['G'],,5,,{4}{G},,"When this enchantment enters, create a 1/1 white Human creature token, a 1/1 blue Merfolk creature token, and a 1/1 red Goblin creature token. Then secretly choose Human, Merfolk, or Goblin.
+Sacrifice this enchantment, Reveal the creature type you chose: If target attacking creature token is the chosen type, put three +1/+1 counters on it and it gains deathtouch until end of turn.",,Enchantment
+a-little-chat,0,A Little Chat,,['U'],,2,,{1}{U},,"Casualty 1 (As you cast this spell, you may sacrifice a creature with power 1 or greater. When you do, copy this spell.)
+Look at the top two cards of your library. Put one of them into your hand and the other on the bottom of your library.",,Instant
+a-realm-reborn,0,A Realm Reborn,,['G'],,6,,{4}{G}{G},,"Other permanents you control have ""{T}: Add one mana of any color.""",,Enchantment
+a-tale-for-the-ages,0,A Tale for the Ages,,['W'],,2,,{1}{W},,Enchanted creatures you control get +2/+2.,,Enchantment
+aang-a-lot-to-learn,0,"Aang, A Lot to Learn",,"['G', 'W']",,3,,{2}{G/W},3,"Aang has vigilance as long as there's a Lesson card in your graveyard.
+Whenever another creature you control dies, put a +1/+1 counter on Aang.",2,Legendary Creature — Human Avatar Ally
+aang-air-nomad,0,"Aang, Air Nomad",,['W'],,5,,{3}{W}{W},5,"Flying (This creature can't be blocked except by creatures with flying or reach.)
+Vigilance (Attacking doesn't cause this creature to tap.)
+Other creatures you control have vigilance.",4,Legendary Creature — Human Avatar Ally
+aang-airbending-master,0,"Aang, Airbending Master",,['W'],,5,,{4}{W},4,"When Aang enters, airbend another target creature. (Exile it. While it's exiled, its owner may cast it for {2} rather than its mana cost.)
+Whenever one or more creatures you control leave the battlefield without dying, you get an experience counter.
+At the beginning of your upkeep, create a 1/1 white Ally creature token for each experience counter you have.",4,Legendary Creature — Human Avatar Ally
+aang-and-katara,0,Aang and Katara,,"['G', 'U', 'W']",,6,,{3}{G}{W}{U},5,"Whenever Aang and Katara enter or attack, create X 1/1 white Ally creature tokens, where X is the number of tapped artifacts and/or creatures you control.",5,Legendary Creature — Human Avatar Ally
+aang-at-the-crossroads-aang-destined-savior,0,"Aang, at the Crossroads",a,"['G', 'U', 'W']",,5,,{2}{G}{W}{U},3,"Flying
+When Aang enters, look at the top five cards of your library. You may put a creature card with mana value 4 or less from among them onto the battlefield. Put the rest on the bottom of your library in a random order.
+When another creature you control leaves the battlefield, transform Aang at the beginning of the next upkeep.",3,Legendary Creature — Human Avatar Ally
+aang-at-the-crossroads-aang-destined-savior,1,"Aang, Destined Savior",b,[],,5,,,4,"Flying
+Land creatures you control have vigilance.
+At the beginning of combat on your turn, earthbend 2. (Target land you control becomes a 0/0 creature with haste that's still a land. Put two +1/+1 counters on it. When it dies or is exiled, return it to the battlefield tapped.)",4,Legendary Creature — Avatar Ally
+aang-s-defense,0,Aang's Defense,,['W'],,1,,{W},,"Target blocking creature you control gets +2/+2 until end of turn.
+Draw a card.",,Instant
+aang-s-iceberg,0,Aang's Iceberg,,['W'],,3,,{2}{W},,"Flash
+When this enchantment enters, exile up to one other target nonland permanent until this enchantment leaves the battlefield.
+Waterbend {3}: Sacrifice this enchantment. If you do, scry 2. (While paying a waterbend cost, you can tap your artifacts and creatures to help. Each one pays for {1}.)",,Enchantment
+aang-s-journey,0,Aang's Journey,,[],,2,,{2},,"Kicker {2} (You may pay an additional {2} as you cast this spell.)
+Search your library for a basic land card. If this spell was kicked, instead search your library for a basic land card and a Shrine card. Reveal those cards, put them into your hand, then shuffle.
+You gain 2 life.",,Sorcery — Lesson
+aang-swift-savior-aang-and-la-ocean-s-fury,0,"Aang, Swift Savior",a,"['U', 'W']",,3,,{1}{W}{U},2,"Flash
+Flying
+When Aang enters, airbend up to one other target creature or spell. (Exile it. While it's exiled, its owner may cast it for {2} rather than its mana cost.)
+Waterbend {8}: Transform Aang.",3,Legendary Creature — Human Avatar Ally
+aang-swift-savior-aang-and-la-ocean-s-fury,1,"Aang and La, Ocean's Fury",b,[],,3,,,5,"Reach, trample
+Whenever Aang and La attack, put a +1/+1 counter on each tapped creature you control.",5,Legendary Creature — Avatar Spirit Ally
+aang-the-last-airbender,0,"Aang, the Last Airbender",,['W'],,4,,{3}{W},3,"Flying
+When Aang enters, airbend up to one other target nonland permanent. (Exile it. While it's exiled, its owner may cast it for {2} rather than its mana cost.)
+Whenever you cast a Lesson spell, Aang gains lifelink until end of turn.",2,Legendary Creature — Human Avatar Ally
+aarakocra-sneak,0,Aarakocra Sneak,,['U'],,4,,{3}{U},1,"Flying
+When this creature enters, you take the initiative.",4,Creature — Bird Rogue
+aardvark-sloth,0,Aardvark Sloth,,['W'],,4,,{3}{W},3,Lifelink (Damage dealt by this creature also causes you to gain that much life.),3,Creature — Sloth Beast
+aatchik-emerald-radian,0,"Aatchik, Emerald Radian",,"['B', 'G']",,6,,{3}{B}{B}{G},3,"When Aatchik enters, create a 1/1 green Insect creature token for each artifact and/or creature card in your graveyard.
+Whenever another Insect you control dies, put a +1/+1 counter on Aatchik. Each opponent loses 1 life.",3,Legendary Creature — Insect Druid
+abaddon-the-despoiler,0,Abaddon the Despoiler,,"['B', 'R', 'U']",,5,,{2}{U}{B}{R},5,"Trample
+Mark of Chaos Ascendant — During your turn, spells you cast from your hand with mana value X or less have cascade, where X is the total amount of life your opponents have lost this turn.",5,Legendary Creature — Astartes Warrior
+abandon-attachments,0,Abandon Attachments,,"['R', 'U']",,2,,{1}{U/R},,"You may discard a card. If you do, draw two cards.",,Instant — Lesson
+abandon-hope,0,Abandon Hope,,['B'],,2,,{X}{1}{B},,"As an additional cost to cast this spell, discard X cards.
+Look at target opponent's hand and choose X cards from it. That player discards those cards.",,Sorcery
+abandon-reason,0,Abandon Reason,,['R'],,3,,{2}{R},,"Up to two target creatures each get +1/+0 and gain first strike until end of turn. (They deal combat damage before creatures without first strike.)
+Madness {1}{R} (If you discard this card, discard it into exile. When you do, cast it for its madness cost or put it into your graveyard.)",,Instant
+abandon-the-post,0,Abandon the Post,,['R'],,2,,{1}{R},,"Up to two target creatures can't block this turn.
+Flashback {3}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)",,Sorcery
+abandoned-air-temple,0,Abandoned Air Temple,,[],,0,,,,"This land enters tapped unless you control a basic land.
+{T}: Add {W}.
+{3}{W}, {T}: Put a +1/+1 counter on each creature you control.",,Land
+abandoned-campground,0,Abandoned Campground,,[],,0,,,,"This land enters tapped unless a player has 13 or less life.
+{T}: Add {W} or {U}.",,Land
+abandoned-outpost,0,Abandoned Outpost,,[],,0,,,,"This land enters tapped.
+{T}: Add {W}.
+{T}, Sacrifice this land: Add one mana of any color.",,Land
+abandoned-sarcophagus,0,Abandoned Sarcophagus,,[],,3,,{3},,"You may cast spells that have a cycling ability from your graveyard.
+If a card that has a cycling ability would be put into your graveyard from anywhere and it wasn't cycled, exile it instead.",,Artifact
+abattoir-ghoul,0,Abattoir Ghoul,,['B'],,4,,{3}{B},3,"First strike
+Whenever a creature dealt damage by this creature this turn dies, you gain life equal to that creature's toughness.",2,Creature — Zombie
+abbey-gargoyles,0,Abbey Gargoyles,,['W'],,5,,{2}{W}{W}{W},3,"Flying, protection from red",4,Creature — Gargoyle
+abbey-griffin,0,Abbey Griffin,,['W'],,4,,{3}{W},2,"Flying, vigilance",2,Creature — Griffin
+abbey-matron,0,Abbey Matron,,['W'],,3,,{2}{W},1,"{W}, {T}: This creature gets +0/+3 until end of turn.",3,Creature — Human Cleric
+abbot-of-keral-keep,0,Abbot of Keral Keep,,['R'],,2,,{1}{R},2,"Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)
+When this creature enters, exile the top card of your library. Until end of turn, you may play that card.",1,Creature — Human Monk
+abby-merciless-soldier,0,"Abby, Merciless Soldier",,"['G', 'R']",,3,,{1}{R}{G},4,"When you cast this spell, create a number of 1/1 black Fungus Zombie creature tokens named Cordyceps Infected equal to the amount of mana spent to cast it.
+Abby enters under the control of an opponent of your choice.
+Partner—Survivors (You can have two commanders if both have this ability.)",4,Legendary Creature — Human Survivor
+abdel-adrian-gorion-s-ward,0,"Abdel Adrian, Gorion's Ward",,['W'],,5,,{4}{W},4,"When Abdel Adrian enters, exile any number of other nonland permanents you control until Abdel Adrian leaves the battlefield. Create a 1/1 white Soldier creature token for each permanent exiled this way.
+Choose a Background (You can have a Background as a second commander.)",4,Legendary Creature — Human Warrior
+abduction,0,Abduction,,['U'],,4,,{2}{U}{U},,"Enchant creature
+When this Aura enters, untap enchanted creature.
+You control enchanted creature.
+When enchanted creature dies, return that card to the battlefield under its owner's control.",,Enchantment — Aura
+aberrant,0,Aberrant,,['G'],,2,,{X}{1}{G},0,"Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.)
+Trample
+Heavy Power Hammer — Whenever this creature deals combat damage to a player, destroy target artifact or enchantment that player controls.",0,Creature — Tyranid Mutant
+aberrant-mind-sorcerer,0,Aberrant Mind Sorcerer,,['U'],,5,,{4}{U},3,"Psionic Spells — When this creature enters, choose target instant or sorcery card in your graveyard, then roll a d20.
+1—9 | You may put that card on top of your library.
+10—20 | Return that card to your hand.",4,Creature — Human Elf Shaman Sorcerer
+aberrant-researcher-perfected-form,0,Aberrant Researcher,a,['U'],,4,,{3}{U},3,"Flying
+At the beginning of your upkeep, mill a card. If an instant or sorcery card was milled this way, transform this creature. (To mill a card, put the top card of your library into your graveyard.)",2,Creature — Human Insect
+aberrant-researcher-perfected-form,1,Perfected Form,b,['U'],,4,,,5,Flying,4,Creature — Insect Horror
+aberrant-return,0,Aberrant Return,,['B'],,6,,{4}{B}{B},,"Put one, two, or three target creature cards from graveyards onto the battlefield under your control. Each of them enters with an additional -1/-1 counter on it.",,Sorcery
+abeyance,0,Abeyance,,['W'],,2,,{1}{W},,"Until end of turn, target player can't cast instant or sorcery spells, and that player can't activate abilities that aren't mana abilities.
+Draw a card.",,Instant
+abhorrent-oculus,0,Abhorrent Oculus,,['U'],,3,,{2}{U},5,"As an additional cost to cast this spell, exile six cards from your graveyard.
+Flying
+At the beginning of each opponent's upkeep, manifest dread. (Look at the top two cards of your library. Put one onto the battlefield face down as a 2/2 creature and the other into your graveyard. Turn it face up any time for its mana cost if it's a creature card.)",5,Creature — Eye
+abhorrent-overlord,0,Abhorrent Overlord,,['B'],,7,,{5}{B}{B},6,"Flying
+When this creature enters, create a number of 1/1 black Harpy creature tokens with flying equal to your devotion to black. (Each {B} in the mana costs of permanents you control counts toward your devotion to black.)
+At the beginning of your upkeep, sacrifice a creature.",6,Creature — Demon
+abiding-grace,0,Abiding Grace,,['W'],,3,,{2}{W},,"At the beginning of your end step, choose one —
+• You gain 1 life.
+• Return target creature card with mana value 1 from your graveyard to the battlefield.",,Enchantment
+abigale-eloquent-first-year,0,"Abigale, Eloquent First-Year",,"['B', 'W']",,2,,{W/B}{W/B},1,"Flying, first strike, lifelink
+When Abigale enters, up to one other target creature loses all abilities. Put a flying counter, a first strike counter, and a lifelink counter on that creature.",1,Legendary Creature — Bird Bard
+abjure,0,Abjure,,['U'],,1,,{U},,"As an additional cost to cast this spell, sacrifice a blue permanent.
+Counter target spell.",,Instant
+abnormal-endurance,0,Abnormal Endurance,,['B'],,2,,{1}{B},,"Until end of turn, target creature gets +2/+0 and gains ""When this creature dies, return it to the battlefield tapped under its owner's control.""",,Instant
+aboleth-spawn,0,Aboleth Spawn,,['U'],,3,,{2}{U},2,"Flash
+Ward {2}
+Probing Telepathy — Whenever a creature entering under an opponent's control causes a triggered ability of that creature to trigger, you may copy that ability. You may choose new targets for the copy.",3,Creature — Fish Horror
+abolish,0,Abolish,,['W'],,3,,{1}{W}{W},,"You may discard a Plains card rather than pay this spell's mana cost.
+Destroy target artifact or enchantment.",,Instant
+abominable-treefolk,0,Abominable Treefolk,,"['G', 'U']",,4,,{2}{G}{U},*,"Trample
+Abominable Treefolk's power and toughness are each equal to the number of snow permanents you control.
+When this creature enters, tap target creature an opponent controls. That creature doesn't untap during its controller's next untap step.",*,Snow Creature — Treefolk
+abomination,0,Abomination,,['B'],,5,,{3}{B}{B},2,"Whenever this creature blocks or becomes blocked by a green or white creature, destroy that creature at end of combat.",6,Creature — Horror
+abomination-of-gudul,0,Abomination of Gudul,,"['B', 'G', 'U']",,6,,{3}{B}{G}{U},3,"Flying
+Whenever this creature deals combat damage to a player, you may draw a card. If you do, discard a card.
+Morph {2}{B}{G}{U} (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)",4,Creature — Horror
+abomination-of-llanowar,0,Abomination of Llanowar,,"['B', 'G']",,3,,{1}{B}{G},*,"Vigilance; menace (This creature can't be blocked except by two or more creatures.)
+Abomination of Llanowar's power and toughness are each equal to the number of Elves you control plus the number of Elf cards in your graveyard.",*,Legendary Creature — Elf Horror
+aboroth,0,Aboroth,,['G'],,6,,{4}{G}{G},9,"Cumulative upkeep—Put a -1/-1 counter on this creature. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)",9,Creature — Elemental
+aboshan-cephalid-emperor,0,"Aboshan, Cephalid Emperor",,['U'],,6,,{4}{U}{U},3,"Tap an untapped Octopus you control: Tap target permanent.
+{U}{U}{U}: Tap all creatures without flying.",3,Legendary Creature — Octopus Noble
+aboshan-s-desire,0,Aboshan's Desire,,['U'],,1,,{U},,"Enchant creature
+Enchanted creature has flying.
+Threshold — Enchanted creature has shroud as long as there are seven or more cards in your graveyard. (It can't be the target of spells or abilities.)",,Enchantment — Aura
+about-face,0,About Face,,['R'],,1,,{R},,Switch target creature's power and toughness until end of turn.,,Instant
+abrade,0,Abrade,,['R'],,2,,{1}{R},,"Choose one —
+• Abrade deals 3 damage to target creature.
+• Destroy target artifact.",,Instant
+abraded-bluffs,0,Abraded Bluffs,,[],,0,,,,"This land enters tapped.
+When this land enters, it deals 1 damage to target opponent.
+{T}: Add {R} or {W}.",,Land — Desert
+abrupt-decay,0,Abrupt Decay,,"['B', 'G']",,2,,{B}{G},,"This spell can't be countered.
+Destroy target nonland permanent with mana value 3 or less.",,Instant
+absolute-grace,0,Absolute Grace,,['W'],,2,,{1}{W},,All creatures have protection from black.,,Enchantment
+absolute-law,0,Absolute Law,,['W'],,2,,{1}{W},,All creatures have protection from red.,,Enchantment
+absolute-virtue,0,Absolute Virtue,,"['U', 'W']",,8,,{6}{W}{U},8,"This spell can't be countered.
+Flying
+You have protection from each of your opponents. (You can't be dealt damage, enchanted, or targeted by anything controlled by your opponents.)",8,Legendary Creature — Avatar Warrior
+absolver-thrull,0,Absolver Thrull,,['W'],,4,,{3}{W},2,"Haunt (When this creature dies, exile it haunting target creature.)
+When this creature enters or the creature it haunts dies, destroy target enchantment.",3,Creature — Thrull Cleric
+absolving-lammasu,0,Absolving Lammasu,,['W'],,5,,{4}{W},4,"Flying
+When this creature enters, all suspected creatures are no longer suspected.
+When this creature dies, you gain 3 life and suspect up to one target creature an opponent controls. (A suspected creature has menace and can't block.)",3,Creature — Lammasu
+absorb,0,Absorb,,"['U', 'W']",,3,,{W}{U}{U},,Counter target spell. You gain 3 life.,,Instant
+absorb-identity,0,Absorb Identity,,['U'],,2,,{1}{U},,Return target creature to its owner's hand. You may have Shapeshifters you control become copies of that creature until end of turn.,,Instant
+absorb-vis,0,Absorb Vis,,['B'],,7,,{6}{B},,"Target player loses 4 life and you gain 4 life.
+Basic landcycling {1}{B} ({1}{B}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",,Sorcery
+abstergo-entertainment,0,Abstergo Entertainment,,[],,0,,,,"{T}: Add {C}.
+{1}, {T}: Add one mana of any color.
+{3}, {T}, Exile Abstergo Entertainment: Return up to one target historic card from your graveyard to your hand, then exile all graveyards. (Artifacts, legendaries, and Sagas are historic.)",,Legendary Land
+abstruse-appropriation,0,Abstruse Appropriation,,[],,4,,{2}{W}{B},,"Devoid (This card has no color.)
+Exile target nonland permanent. You may cast that card for as long as it remains exiled, and you may spend colorless mana as though it were mana of any color to cast that spell.",,Instant
+abstruse-archaic,0,Abstruse Archaic,,[],,4,,{4},3,"Vigilance
+{1}, {T}: Copy target activated or triggered ability you control from a colorless source. You may choose new targets for the copy. (Mana abilities can't be targeted.)",4,Creature — Avatar
+abstruse-interference,0,Abstruse Interference,,[],,3,,{2}{U},,"Devoid (This card has no color.)
+Counter target spell unless its controller pays {1}. You create a 1/1 colorless Eldrazi Scion creature token. It has ""Sacrifice this token: Add {C}."" ({C} represents colorless mana.)",,Instant
+abu-ja-far,0,Abu Ja'far,,['W'],,1,,{W},0,"When this creature dies, destroy all creatures blocking or blocked by it. They can't be regenerated.",1,Creature — Human
+abuelo-ancestral-echo,0,"Abuelo, Ancestral Echo",,"['U', 'W']",,3,,{1}{W}{U},2,"Flying, ward {2}
+{1}{W}{U}: Exile another target creature or artifact you control. Return it to the battlefield under its owner's control at the beginning of the next end step.",2,Legendary Creature — Spirit
+abuelo-s-awakening,0,Abuelo's Awakening,,['W'],,4,,{X}{3}{W},,Return target artifact or non-Aura enchantment card from your graveyard to the battlefield with X additional +1/+1 counters on it. It's a 1/1 Spirit creature with flying in addition to its other types.,,Sorcery
+abuna-acolyte,0,Abuna Acolyte,,['W'],,2,,{1}{W},1,"{T}: Prevent the next 1 damage that would be dealt to any target this turn.
+{T}: Prevent the next 2 damage that would be dealt to target artifact creature this turn.",1,Creature — Cat Cleric
+abuna-s-chant,0,Abuna's Chant,,['W'],,4,,{3}{W},,"Choose one —
+• You gain 5 life.
+• Prevent the next 5 damage that would be dealt to target creature this turn.
+Entwine {2} (Choose both if you pay the entwine cost.)",,Instant
+abundance,0,Abundance,,['G'],,4,,{2}{G}{G},,"If you would draw a card, you may instead choose land or nonland and reveal cards from the top of your library until you reveal a card of the chosen kind. Put that card into your hand and put all other cards revealed this way on the bottom of your library in any order.",,Enchantment
+abundant-countryside,0,Abundant Countryside,,[],,0,,,,"{T}: Add {C}.
+{T}: Add one mana of any color. Spend this mana only to cast a creature spell.
+{6}, {T}: Create a 1/1 colorless Shapeshifter creature token with changeling. (It's every creature type.)",,Land
+abundant-growth,0,Abundant Growth,,['G'],,1,,{G},,"Enchant land
+When this Aura enters, draw a card.
+Enchanted land has ""{T}: Add one mana of any color.""",,Enchantment — Aura
+abundant-harvest,0,Abundant Harvest,,['G'],,1,,{G},,Choose land or nonland. Reveal cards from the top of your library until you reveal a card of the chosen kind. Put that card into your hand and the rest on the bottom of your library in a random order.,,Sorcery
+abundant-maw,0,Abundant Maw,,[],,8,,{8},6,"Emerge {6}{B} (You may cast this spell by sacrificing a creature and paying the emerge cost reduced by that creature's mana value.)
+When you cast this spell, target opponent loses 3 life and you gain 3 life.",4,Creature — Eldrazi Leech
+abyssal-gatekeeper,0,Abyssal Gatekeeper,,['B'],,2,,{1}{B},1,"When this creature dies, each player sacrifices a creature of their choice.",1,Creature — Horror
+abyssal-gorestalker,0,Abyssal Gorestalker,,['B'],,6,,{4}{B}{B},6,"When this creature enters, each player sacrifices two creatures of their choice.",6,Creature — Horror
+abyssal-harvester,0,Abyssal Harvester,,['B'],,3,,{1}{B}{B},3,"{T}: Exile target creature card from a graveyard that was put there this turn. Create a token that's a copy of it, except it's a Nightmare in addition to its other types. Then exile all other Nightmare tokens you control.",2,Creature — Demon Warlock
+abyssal-horror,0,Abyssal Horror,,['B'],,6,,{4}{B}{B},2,"Flying
+When this creature enters, target player discards two cards.",2,Creature — Horror
+abyssal-hunter,0,Abyssal Hunter,,['B'],,4,,{3}{B},1,"{B}, {T}: Tap target creature. This creature deals damage equal to its power to that creature.",1,Creature — Human Assassin
+abyssal-nightstalker,0,Abyssal Nightstalker,,['B'],,4,,{3}{B},2,"Whenever this creature attacks and isn't blocked, defending player discards a card.",2,Creature — Nightstalker
+abyssal-nocturnus,0,Abyssal Nocturnus,,['B'],,3,,{1}{B}{B},2,"Whenever an opponent discards a card, this creature gets +2/+2 and gains fear until end of turn. (It can't be blocked except by artifact creatures and/or black creatures.)",2,Creature — Horror
+abyssal-persecutor,0,Abyssal Persecutor,,['B'],,4,,{2}{B}{B},6,"Flying, trample
+You can't win the game and your opponents can't lose the game.",6,Creature — Demon
+abyssal-specter,0,Abyssal Specter,,['B'],,4,,{2}{B}{B},2,"Flying
+Whenever this creature deals damage to a player, that player discards a card.",3,Creature — Specter
+abzan-advantage,0,Abzan Advantage,,['W'],,2,,{1}{W},,Target player sacrifices an enchantment of their choice. Bolster 1. (Choose a creature with the least toughness among creatures you control and put a +1/+1 counter on it.),,Instant
+abzan-ascendancy,0,Abzan Ascendancy,,"['B', 'G', 'W']",,3,,{W}{B}{G},,"When this enchantment enters, put a +1/+1 counter on each creature you control.
+Whenever a nontoken creature you control dies, create a 1/1 white Spirit creature token with flying.",,Enchantment
+abzan-banner,0,Abzan Banner,,[],,3,,{3},,"{T}: Add {W}, {B}, or {G}.
+{W}{B}{G}, {T}, Sacrifice this artifact: Draw a card.",,Artifact
+abzan-battle-priest,0,Abzan Battle Priest,,['W'],,4,,{3}{W},3,"Outlast {W} ({W}, {T}: Put a +1/+1 counter on this creature. Outlast only as a sorcery.)
+Each creature you control with a +1/+1 counter on it has lifelink.",2,Creature — Human Cleric
+abzan-beastmaster,0,Abzan Beastmaster,,['G'],,3,,{2}{G},2,"At the beginning of your upkeep, draw a card if you control the creature with the greatest toughness or tied for the greatest toughness.",1,Creature — Dog Shaman
+abzan-charm,0,Abzan Charm,,"['B', 'G', 'W']",,3,,{W}{B}{G},,"Choose one —
+• Exile target creature with power 3 or greater.
+• You draw two cards and you lose 2 life.
+• Distribute two +1/+1 counters among one or two target creatures.",,Instant
+abzan-devotee,0,Abzan Devotee,,['B'],,2,,{1}{B},2,"{1}: Add {W}, {B}, or {G}. Activate only once each turn.
+{2}{B}: Return this card from your graveyard to your hand.",1,Creature — Dog Cleric

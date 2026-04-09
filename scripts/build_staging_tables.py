@@ -9,6 +9,7 @@ from pathlib import Path
 CARDS_PAPER_CONSTRUCTED_DATA = Path("data/selected/atomiccards_paper_constructed.json")
 SETS_PAPER_CONSTRUCTED_DATA = Path("data/selected/setlist_paper_constructed.json")
 OUT_DIR = Path("data/staging")
+PREVIEWS_DIR = Path("data/output/previews")
 REPORT = {}
 
 SCHEMAS_FILE = Path("data/schemas.json")
@@ -317,9 +318,10 @@ def validate_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict:
 def save_staging_tables(dfs: dict[str, pd.DataFrame]) -> None:
     row_counts = {}
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    PREVIEWS_DIR.mkdir(parents=True, exist_ok=True)
 
     for table_type, df in dfs.items():
-        preview_path = OUT_DIR.joinpath(f"preview_stg_{table_type}.csv")
+        preview_path = PREVIEWS_DIR.joinpath(f"preview_stg_{table_type}.csv")
         df.head(100).to_csv(preview_path, index=False)
 
         table_path = OUT_DIR.joinpath(f"stg_{table_type}.parquet")
