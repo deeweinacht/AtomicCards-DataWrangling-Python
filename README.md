@@ -3,6 +3,11 @@ A reproducible ETL pipeline that ingests MTGJSON AtomicCards data and exports no
 
 Taking the full MTGJson dataset and preparing it for product analysis for MTG design teams.
 
+- ingested semi-structured MTGJSON data.
+- modeled it into analytics-ready relational tables.
+- exposed a reusable DuckDB semantic layer through views.
+- answered stakeholder questions with SQL that is interpretable and defensible.
+
 # WORK IN PROGRESS
 
 

@@ -1,0 +1,45 @@
+mechanic,dominant_color,dominant_concentration,runner_up_color,runner_up_concentration,concentration_gap,mono_colored_card_instances,total_card_instances
+Haste,Red,0.827,Green,0.094,0.733,394,595
+Fight,Green,0.809,Red,0.181,0.628,94,130
+Reach,Green,0.792,Red,0.17,0.622,283,361
+Goad,Red,0.6,Blue,0.18,0.42,50,77
+Vigilance,White,0.637,Green,0.219,0.418,411,651
+Deathtouch,Black,0.708,Green,0.292,0.416,202,290
+Treasure,Red,0.538,Black,0.226,0.312,212,313
+Trample,Green,0.563,Red,0.295,0.268,631,921
+Landfall,Green,0.449,Red,0.188,0.261,138,165
+Protection,White,0.446,Green,0.189,0.257,148,190
+Food,Green,0.5,Black,0.245,0.255,102,141
+Scry,Blue,0.476,White,0.229,0.247,292,408
+Hexproof,Green,0.556,Blue,0.333,0.223,63,87
+Menace,Black,0.601,Red,0.391,0.21,238,349
+Madness,Black,0.5,Red,0.31,0.19,58,61
+Investigate,Blue,0.41,White,0.256,0.154,78,132
+Ward,Blue,0.418,Green,0.265,0.153,98,165
+Mill,Blue,0.459,Black,0.315,0.144,381,545
+Landwalk,Green,0.374,Black,0.235,0.139,115,128
+Flash,Blue,0.394,White,0.26,0.134,454,560
+Morph,Blue,0.31,Green,0.19,0.12,142,153
+Prowess,Blue,0.517,Red,0.4,0.117,60,76
+Convoke,White,0.33,Green,0.227,0.103,88,102
+Lifelink,White,0.55,Black,0.45,0.1,211,333
+First strike,White,0.485,Red,0.397,0.088,262,358
+Cumulative upkeep,Blue,0.31,Green,0.225,0.085,71,80
+Flashback,Red,0.297,Green,0.221,0.076,172,197
+Double strike,White,0.526,Red,0.462,0.064,78,111
+Delirium,Green,0.306,Black,0.242,0.064,62,73
+Crew,Blue,0.288,White,0.233,0.055,73,165
+Surveil,Blue,0.452,Black,0.4,0.052,115,186
+Flying,Blue,0.351,White,0.309,0.042,2265,2961
+Kicker,Green,0.248,Red,0.206,0.042,214,225
+Defender,Blue,0.29,White,0.252,0.038,238,304
+Enchant,Blue,0.271,White,0.239,0.032,1157,1221
+Proliferate,Blue,0.354,Green,0.323,0.031,65,93
+Threshold,Black,0.279,Green,0.256,0.023,86,98
+Cycling,Blue,0.242,White,0.221,0.021,289,375
+Transform,Black,0.217,White,0.205,0.012,258,380
+Partner,Blue,0.218,Black,0.207,0.011,87,129
+Equip,White,0.296,Red,0.285,0.011,186,561
+Suspend,Blue,0.219,Red,0.219,0.0,64,70
+Typecycling,Blue,0.219,Red,0.219,0.0,64,78
+Landcycling,Red,0.213,White,0.213,0.0,61,75

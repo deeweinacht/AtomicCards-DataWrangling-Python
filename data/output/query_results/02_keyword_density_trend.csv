@@ -1,0 +1,9 @@
+card_type_category,release_decade,avg_number_of_keyword_mechanics,max_number_of_keyword_mechanics,percent_cards_with_keyword_mechanics
+Non-Permanent,1993-2000,0.06,1,6
+Non-Permanent,2000-2010,0.31,4,29
+Non-Permanent,2010-2020,0.35,4,33
+Non-Permanent,2020-Present,0.45,4,39
+Permanent,1993-2000,0.41,4,34
+Permanent,2000-2010,0.59,6,45
+Permanent,2010-2020,0.75,6,56
+Permanent,2020-Present,1.02,10,65
