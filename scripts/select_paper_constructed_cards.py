@@ -37,7 +37,7 @@ NON_CONSTRUCTED_LAYOUTS = {
     "planar",
     "host",
     "augment",
-    "reversible_card" #  technically a constructed-legal layout, but these are reprints of existing cards and would result in duplicates in the database
+    "reversible_card",  #  technically a constructed-legal layout, but these are reprints of existing cards and would result in duplicates in the database
 }
 NON_CONSTRUCTED_SUPERTYPES = {"host"}
 
@@ -57,7 +57,6 @@ NON_CONSTRUCTED_TYPES = {
 }
 
 NON_CONSTRUCTED_SUBTYPES = {"attraction", "contraption", "dungeon"}
-
 
 UNSETS = {
     "UGL",
@@ -208,9 +207,15 @@ def process_sets(data: list) -> list:
     counts = {"total_sets": len(data), "kept": 0, "not_paper_legal": 0}
 
     for set in data:
-        if set.get("code") == "PMEI":  # exclude the 'Media and Collaboration Promos' set because it causes issues with card release date analysis
+        if (
+            set.get("code") == "PMEI"
+        ):  # exclude the 'Media and Collaboration Promos' set because it causes issues with card release date analysis
             continue
-        if not set.get("isOnlineOnly", False) and set.get("type", "").lower() not in {"memorabilia", "token", "minigame"}:
+        if not set.get("isOnlineOnly", False) and set.get("type", "").lower() not in {
+            "memorabilia",
+            "token",
+            "minigame",
+        }:
             legal_sets.append(set)
             counts["kept"] += 1
         else:
@@ -234,9 +239,11 @@ def select_sets():
     counts = process_sets(data)
     print_set_counts(counts)
 
+
 def select_paper_constructed():
     select_cards()
     select_sets()
+
 
 if __name__ == "__main__":
     select_paper_constructed()

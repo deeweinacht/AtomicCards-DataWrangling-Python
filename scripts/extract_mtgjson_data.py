@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 
 BASE_URL = "https://mtgjson.com/api/v5/"
 
-DATASETS = [
+DATASET_METADATA = [
     {
         "name": "AtomicCards",
         "file": "AtomicCards.json.xz",
@@ -27,6 +27,7 @@ DATASETS = [
 ]
 
 OUT_DIR = Path("data/raw")
+
 
 def download_file(url: str, path: Path):
     request = requests.get(url, stream=True)
@@ -102,12 +103,14 @@ def extract(outdir: Path, dataset: dict):
     print(f"{dataset['name']} extraction complete")
     print(f"JSON saved to {json_path}")
 
+
 def extract_mtgjson_datasets():
     print("Extracting MTGJSON datasets...")
-    for dataset in DATASETS:
+    for dataset in DATASET_METADATA:
         print(f"\nProcessing {dataset['name']}...")
         extract(OUT_DIR, dataset)
     print("\nAll extractions complete.")
+
 
 if __name__ == "__main__":
     extract_mtgjson_datasets()

@@ -54,8 +54,8 @@ select
     ), 2) as set_outlier_score,
     round(mana_z_score, 3) as mana_cost_z_score,
     round(complexity_z_score, 3) as complexity_z_score,
-    round((creature_z_score + artifact_z_score + enchantment_z_score + instant_z_score + sorcery_z_score + land_z_score)/6.0, 3) as card_type_z_score,
-    round((colorless_z_score + mono_z_score + multi_z_score)/3.0, 3) as color_type_z_score
+    round((creature_z_score + artifact_z_score + enchantment_z_score + instant_z_score + sorcery_z_score + land_z_score)/6.0, 3) as card_types_z_score,
+    round((colorless_z_score + mono_z_score + multi_z_score)/3.0, 3) as color_types_z_score
 from z_scores
 order by set_outlier_score desc
 limit 10;

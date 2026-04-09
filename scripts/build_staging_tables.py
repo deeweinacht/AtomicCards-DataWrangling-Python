@@ -11,18 +11,20 @@ SETS_PAPER_CONSTRUCTED_DATA = Path("data/selected/setlist_paper_constructed.json
 OUT_DIR = Path("data/staging")
 REPORT = {}
 
-SCHEMAS_FILE = Path("docs/schemas.json")
+SCHEMAS_FILE = Path("data/schemas.json")
 STAGING_SCHEMA = {}
 
 
 # Map for converting the different type categories in the source data to a consistent "type_kind" in the staging tables
 KIND_MAP = {"types": "type", "supertypes": "supertype", "subtypes": "subtype"}
 
+
 def load_staging_schema() -> None:
     global STAGING_SCHEMA
     with open(SCHEMAS_FILE, "r", encoding="utf-8") as f:
         table_schemas = json.load(f)
     STAGING_SCHEMA = table_schemas["staging_tables"]
+
 
 def build_card_row(card_name: str, faces: list) -> dict:
     # For simplicity, card-level fields are taken from the first face, as these should be consistent across faces.
@@ -109,6 +111,7 @@ def build_type_row(card_id: str, face_index: int, kind: str, type_value: str) ->
         "type": type_value,
     }
 
+
 def build_set_row(set: dict) -> dict:
     return {
         "id": set.get("code"),  # Use set code as unique ID
@@ -119,6 +122,7 @@ def build_set_row(set: dict) -> dict:
         "type": set.get("type"),
         "total_cards": set.get("totalSetSize"),
     }
+
 
 def create_staging_dataframes():
     """Load card data from JSON and create initial DataFrames for staging tables."""
@@ -145,11 +149,9 @@ def create_staging_dataframes():
                 face_type_rows = build_types_rows(card_row["id"], i, face)
                 card_type_rows.extend(face_type_rows)
 
-
-
     with open(SETS_PAPER_CONSTRUCTED_DATA, "r", encoding="utf-8") as f:
         raw_sets = json.load(f)
-    
+
     for set in raw_sets:
         set_rows.append(build_set_row(set))
 
@@ -244,9 +246,7 @@ def sort_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFr
         )
     if "keywords" in dfs:
         dfs["keywords"] = (
-            dfs["keywords"]
-            .sort_values(["card_id", "keyword"])
-            .reset_index(drop=True)
+            dfs["keywords"].sort_values(["card_id", "keyword"]).reset_index(drop=True)
         )
     if "types" in dfs:
         dfs["types"] = (
@@ -270,13 +270,13 @@ def validate_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict:
             validation_failures.append(
                 f'Expected staging table "{table_type}" is missing.'
             )
-            continue # if the table is missing, we can't run any further validations on it, so we skip to the next table
+            continue  # if the table is missing, we can't run any further validations on it, so we skip to the next table
         for column, dtype in table_definition.items():
             if column not in df.columns:
                 validation_failures.append(
                     f'Expected column "{column}" is missing from {table_type} staging table.'
                 )
-                continue # if the column is missing, we can't run any further validations on it, so we skip to the next column
+                continue  # if the column is missing, we can't run any further validations on it, so we skip to the next column
             if df[column].dtype != dtype:
                 validation_failures.append(
                     f'Column "{column}" in {table_type} staging table has incorrect type. Expected {dtype}, got {df[column].dtype}.'
@@ -287,9 +287,7 @@ def validate_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict:
                 )
 
     if dfs["cards"]["id"].duplicated().any():
-        validation_failures.append(
-            "id column in cards table must have unique values."
-        )
+        validation_failures.append("id column in cards table must have unique values.")
 
     if dfs["faces"][["card_id", "face_index"]].duplicated().any():
         validation_failures.append(
@@ -300,9 +298,8 @@ def validate_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict:
         validation_failures.append(
             "Combination of card_id and keyword in keywords table must be unique."
         )
-    
 
-    if (dfs["types"][["card_id", "face_index", "type_kind", "type"]].duplicated().any()):
+    if dfs["types"][["card_id", "face_index", "type_kind", "type"]].duplicated().any():
         validation_failures.append(
             "Combination of card_id, face_index, type_kind, and type in types table must be unique."
         )
@@ -343,6 +340,7 @@ def save_staging_report():
         json.dump(REPORT, f, indent=2)
     print(f"Staging report saved to {report_path}")
 
+
 def build_staging_tables():
     # create and validate staging tables
 
@@ -370,6 +368,7 @@ def build_staging_tables():
     print(
         "Staging tables created successfully. See staging_report.json for details about any issues encountered during processing."
     )
+
 
 if __name__ == "__main__":
     build_staging_tables()
