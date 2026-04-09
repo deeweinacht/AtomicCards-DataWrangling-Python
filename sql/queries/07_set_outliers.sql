@@ -30,17 +30,17 @@ with global_stats as (
 z_scores as (
     select
         sdp.set_name,
-        abs(sdp.avg_mana_value - g_mana) / g_mana_stdev as mana_z_score,
-        abs(sdp.avg_complexity_score - g_complexity) / g_complexity_stdev as complexity_z_score,
-        abs(sdp.creature_type_share - g_creatures) / g_creatures_stdev as creature_z_score,
-        abs(sdp.artifact_type_share - g_artifacts) / g_artifacts_stdev as artifact_z_score,
-        abs(sdp.enchantment_type_share - g_enchantments) / g_enchantments_stdev as enchantment_z_score,
-        abs(sdp.instant_type_share - g_instants) / g_instants_stdev as instant_z_score,
-        abs(sdp.sorcery_type_share - g_sorceries) / g_sorceries_stdev as sorcery_z_score,
-        abs(sdp.land_type_share - g_lands) / g_lands_stdev as land_z_score,
-        abs(sdp.colorless_proportion - g_colorless) / g_colorless_stdev as colorless_z_score,
-        abs(sdp.mono_card_proportion - g_mono) / g_mono_stdev as mono_z_score,
-        abs(sdp.multi_card_proportion - g_multi) / g_multi_stdev as multi_z_score
+        abs(sdp.avg_mana_value - g_mana) / nullif(g_mana_stdev, 0) as mana_z_score,
+        abs(sdp.avg_complexity_score - g_complexity) / nullif(g_complexity_stdev, 0) as complexity_z_score,
+        abs(sdp.creature_type_share - g_creatures) / nullif(g_creatures_stdev, 0) as creature_z_score,
+        abs(sdp.artifact_type_share - g_artifacts) / nullif(g_artifacts_stdev, 0) as artifact_z_score,
+        abs(sdp.enchantment_type_share - g_enchantments) / nullif(g_enchantments_stdev, 0) as enchantment_z_score,
+        abs(sdp.instant_type_share - g_instants) / nullif(g_instants_stdev, 0) as instant_z_score,
+        abs(sdp.sorcery_type_share - g_sorceries) / nullif(g_sorceries_stdev, 0) as sorcery_z_score,
+        abs(sdp.land_type_share - g_lands) / nullif(g_lands_stdev, 0) as land_z_score,
+        abs(sdp.colorless_proportion - g_colorless) / nullif(g_colorless_stdev, 0) as colorless_z_score,
+        abs(sdp.mono_card_proportion - g_mono) / nullif(g_mono_stdev, 0) as mono_z_score,
+        abs(sdp.multi_card_proportion - g_multi) / nullif(g_multi_stdev, 0) as multi_z_score
     from analytics.v_set_design_profile as sdp
     cross join global_stats
     where sdp.set_type in ('expansion', 'core')
