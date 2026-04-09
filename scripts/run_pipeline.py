@@ -1,19 +1,41 @@
 """
-This script runs the entire data pipeline:
- 1. Extract the dataset from MTGJSON and select only the paper constructed-legal cards.
- 2. Build staging tables from the selected data.
- 3. Build analytics tables from the staging tables.
- 4. Load the analytics tables into a DuckDB database for querying and analysis."""
+Run the ETL pipeline from source extraction through analytics-layer loading.
+
+Steps:
+1. Extract MTGJSON source datasets.
+2. Filter the source data to the paper-constructed project scope.
+3. Build normalized staging datasets.
+4. Build curated warehouse-layer datasets.
+5. Load warehouse outputs into the DuckDB analytics layer for semantic querying.
+"""
 
 from extract_mtgjson_data import extract_mtgjson_datasets
-from filter_paper_constructed_cards import select_paper_constructed
+from filter_paper_constructed_cards import filter_for_paper_constructed
 from build_staging_tables import build_staging_tables
-from build_core_tables import build_warehouse_tables
-from load_into_analytics_database import load_warehouse_into_duckdb
+from build_core_tables import build_warehouse_core_tables
+from load_into_analytics_database import load_core_tables_into_duckdb
+
+
+def main():
+    print("Running ETL pipeline...")
+
+    print("Step 1/5: Extracting MTGJSON datasets...")
+    extract_mtgjson_datasets()
+
+    print("Step 2/5: Filtering cards and sets by paper constructed scope...")
+    filter_for_paper_constructed()
+
+    print("Step 3/5: Building staging tables...")
+    build_staging_tables()
+
+    print("Step 4/5: Building warehouse core tables...")
+    build_warehouse_core_tables()
+
+    print("Step 5/5: Loading core tables into DuckDB analytics layer...")
+    load_core_tables_into_duckdb()
+
+    print("ETL pipeline complete.")
+
 
 if __name__ == "__main__":
-    extract_mtgjson_datasets()
-    select_paper_constructed()
-    build_staging_tables()
-    build_warehouse_tables()
-    load_warehouse_into_duckdb()
+    main()

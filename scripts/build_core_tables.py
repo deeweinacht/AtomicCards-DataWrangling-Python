@@ -321,7 +321,9 @@ def save_warehouse_tables(analytics: Dict[str, pd.DataFrame]) -> None:
             csv_df[col] = csv_df[col].apply(
                 lambda x: json.dumps(x) if isinstance(x, (dict, list)) else x
             )
-        csv_df.head(100).to_csv(PREVIEW_DIR.joinpath(f"preview_core_{table}.csv"), index=False)
+        csv_df.head(100).to_csv(
+            PREVIEW_DIR.joinpath(f"preview_core_{table}.csv"), index=False
+        )
 
         # Parquet: keep objects
         df.to_parquet(OUTPUT_DIR.joinpath(f"core_{table}.parquet"), index=False)
@@ -339,7 +341,7 @@ def save_warehouse_report(report: Dict[str, Any]) -> None:
         json.dump(report, f, indent=2, default=str)
 
 
-def build_warehouse_tables():
+def build_warehouse_core_tables():
     load_table_schemas()
     staging_dfs = read_staging_tables(INPUT_DIR)
     validate_staging_dataframes(staging_dfs)
@@ -359,4 +361,4 @@ def build_warehouse_tables():
 
 
 if __name__ == "__main__":
-    build_warehouse_tables()
+    build_warehouse_core_tables()

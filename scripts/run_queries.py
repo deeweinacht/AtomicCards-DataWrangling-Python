@@ -45,9 +45,7 @@ def run_queries():
     query_run_logs["total_queries"] = query_count
     query_run_logs["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    with open(
-        OUTPUT_DIR.joinpath("query_run_logs.json"), "w", encoding="utf-8"
-    ) as f:
+    with open(OUTPUT_DIR.joinpath("query_run_logs.json"), "w", encoding="utf-8") as f:
         json.dump(query_run_logs, f, indent=2, ensure_ascii=False)
 
 

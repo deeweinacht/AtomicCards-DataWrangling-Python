@@ -39,7 +39,7 @@ def build_analytics_sematic_layer():
         con.execute(view_sql)
 
 
-def load_warehouse_into_duckdb():
+def load_core_tables_into_duckdb():
     load_warehouse_schema()
     create_analytics_schemas()
     load_warehouse_tables()
@@ -47,4 +47,4 @@ def load_warehouse_into_duckdb():
 
 
 if __name__ == "__main__":
-    load_warehouse_into_duckdb()
+    load_core_tables_into_duckdb()

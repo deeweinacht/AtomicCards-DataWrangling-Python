@@ -18,9 +18,17 @@ Naming conventions:
 - analytics.*: DuckDB semantic views built on top of core parquet-backed outputs
 - numbered SQL files: final business queries and semantic view definitions in deterministic review order
 
+## Pipeline Orchestration
+
+**[run_pipeline.py](../scripts/run_pipeline.py)
+The main orchestration entrypoint for the ETL workflow. 
+
+It sequentially executes extraction, project-scope filtering, staging transformations, warehouse modeling, and DuckDB analytics-layer loading.
+Final business queries are executed separately through [run_queries](../scripts/run_queries.py).
+
 ## Extract
 
-**[extract_mtgjson_atomic_cards.py](../scripts/extract_mtgjson_atomic_cards.py)** 
+**[extract_mtgjson_data.py](../scripts/extract_mtgjson_data.py)** 
 Downloads the MTGJSON AtomicCards dataset, verifies download integrity using the published SHA256 hash, and extracts the archive.
 
 The script also records metadata about the source dataset for reproducibility and provenance.

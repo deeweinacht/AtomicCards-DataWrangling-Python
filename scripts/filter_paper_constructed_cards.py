@@ -240,10 +240,10 @@ def select_sets():
     print_set_counts(counts)
 
 
-def select_paper_constructed():
+def filter_for_paper_constructed():
     select_cards()
     select_sets()
 
 
 if __name__ == "__main__":
-    select_paper_constructed()
+    filter_for_paper_constructed()
