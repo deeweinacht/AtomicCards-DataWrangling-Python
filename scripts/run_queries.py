@@ -21,32 +21,39 @@ def run_query_file(con, file_path):
 
     if result is not None:
         result.show()
-        result.write_csv(
-            str(OUTPUT_DIR.joinpath(f"{file_path.stem}.csv")), overwrite=True
-        )
+        output_path = str(OUTPUT_DIR.joinpath(f"{file_path.stem}.csv"))
+        result.write_csv(output_path)
+        print("Query results saved to", output_path)
+            
         return {
             "success": True,
-            "output_file": file_path.name,
+            "output_file": output_path,
             "row_count": len(result),
             "result_columns": ", ".join(result.columns),
         }
 
 
 def run_queries():
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    con = duckdb.connect(DB_PATH)
+    print("Running queries...")
 
     query_run_logs = {"total_queries": 0, "timestamp": None, "results": {}}
     query_count = 0
-    for sql_file in sorted(QUERIES_DIR.glob("*.sql")):
-        query_count += 1
-        query_run_logs["results"][sql_file.name] = run_query_file(con, sql_file)
+    with duckdb.connect(str(DB_PATH)) as con:
+        for sql_file in sorted(QUERIES_DIR.glob("*.sql")):
+            query_count += 1
+            query_run_logs["results"][sql_file.name] = run_query_file(con, sql_file)
 
     query_run_logs["total_queries"] = query_count
     query_run_logs["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     with open(OUTPUT_DIR.joinpath("query_run_logs.json"), "w", encoding="utf-8") as f:
         json.dump(query_run_logs, f, indent=2, ensure_ascii=False)
+    
+
+
+    print(f"Ran {query_count} queries. Query run logs saved to {OUTPUT_DIR.joinpath('query_run_logs.json')}")
 
 
 if __name__ == "__main__":

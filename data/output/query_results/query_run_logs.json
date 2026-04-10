@@ -1,46 +1,46 @@
 {
   "total_queries": 7,
-  "timestamp": "2026-04-10 14:07:19",
+  "timestamp": "2026-04-10 14:33:01",
   "results": {
     "01_design_complexity_trend.sql": {
       "success": true,
-      "output_file": "01_design_complexity_trend.sql",
+      "output_file": "data\\output\\query_results\\01_design_complexity_trend.csv",
       "row_count": 7,
       "result_columns": "release_period, avg_text_tokens_per_card, avg_rulings_count_per_card, avg_design_complexity_score, percent_multicolored_cards, percent_multiface_cards"
     },
     "02_keyword_density_trend.sql": {
       "success": true,
-      "output_file": "02_keyword_density_trend.sql",
+      "output_file": "data\\output\\query_results\\02_keyword_density_trend.csv",
       "row_count": 14,
       "result_columns": "card_type_category, release_period, avg_number_of_keyword_mechanics_in_category, max_number_of_keyword_mechanics_in_category, percent_cards_with_keyword_mechanics"
     },
     "03_creature_stat_efficiency_trend.sql": {
       "success": true,
-      "output_file": "03_creature_stat_efficiency_trend.sql",
+      "output_file": "data\\output\\query_results\\03_creature_stat_efficiency_trend.csv",
       "row_count": 7,
       "result_columns": "release_period, avg_stat_efficiency_all_creatures, avg_stat_efficiency_white, avg_stat_efficiency_blue, avg_stat_efficiency_black, avg_stat_efficiency_red, avg_stat_efficiency_green, avg_stat_efficiency_colorless"
     },
     "04_mechanic_frequency_by_color.sql": {
       "success": true,
-      "output_file": "04_mechanic_frequency_by_color.sql",
+      "output_file": "data\\output\\query_results\\04_mechanic_frequency_by_color.csv",
       "row_count": 20,
       "result_columns": "mechanic, percent_mono_white_cards, percent_mono_blue_cards, percent_mono_black_cards, percent_mono_red_cards, percent_mono_green_cards, mono_colored_cards_with_mechanic"
     },
     "05_mechanic_color_concentration.sql": {
       "success": true,
-      "output_file": "05_mechanic_color_concentration.sql",
+      "output_file": "data\\output\\query_results\\05_mechanic_color_concentration.csv",
       "row_count": 44,
       "result_columns": "mechanic, dominant_color, dominant_concentration, runner_up_color, runner_up_concentration, concentration_gap, mono_colored_cards_with_mechanic, total_cards_with_mechanic"
     },
     "06_expansion_set_design_profile.sql": {
       "success": true,
-      "output_file": "06_expansion_set_design_profile.sql",
+      "output_file": "data\\output\\query_results\\06_expansion_set_design_profile.csv",
       "row_count": 114,
       "result_columns": "set_name, release_year, paper_constructed_cards_in_set, avg_mana_value, avg_complexity_score, creature_type_share, artifact_type_share, enchantment_type_share, instant_type_share, sorcery_type_share, land_type_share, percent_colorless_cards, percent_monocolored_cards, percent_multicolored_cards"
     },
     "07_set_outliers.sql": {
       "success": true,
-      "output_file": "07_set_outliers.sql",
+      "output_file": "data\\output\\query_results\\07_set_outliers.csv",
       "row_count": 10,
       "result_columns": "set_name, release_year, set_type, set_design_deviation_score, mana_cost_z_score, complexity_z_score, card_types_z_score, color_types_z_score"
     }
