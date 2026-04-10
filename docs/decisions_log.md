@@ -1,5 +1,22 @@
 # Decisions Log
 
+## Project Scope
+
+**In scope**
+
+- source selection and filtering
+- staged transformations
+- warehouse-layer modeling
+- semantic SQL views
+- representative business queries and CSV outputs
+
+**Out of scope**
+
+- gameplay outcomes
+- tournament or win-rate analysis
+- sales or market performance
+- BI/dashboard delivery
+
 ## Dataset Filtering
 
 This project focuses on cards relevant to real-world deckbuilding in paper-constructed formats. The MTG AtomicCards dataset was selected as the scope of this project is considering mechanically distinct products, where differences in art and printing are not relevant to the design questions and final analysis.
