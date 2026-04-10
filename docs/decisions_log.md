@@ -1,39 +1,32 @@
-## Card Selection
+## Dataset Filtering
 
-This project focuses on cards relevant to real-world deckbuilding in paper-constructed formats.
-The following inclusion and exclusion rules were applied to the MTGJSON AtomicCards dataset to produce the filtered subset atomiccards_legal.json.
+This project focuses on cards relevant to real-world deckbuilding in paper-constructed formats. The MTG AtomicCards dataset was selected as the scope of this project is considering mechanically distinct products, where differences in art and printing are not relevant to the design questions and final analysis.
 
+The filtering layer narrows MTGJSON source data to a paper-constructed analytical scope suitable for card-design analysis. It excludes digital-only content, non-constructed game objects, selected experimental/joke-only card types, and cards printed exclusively in defined un-set products.
+
+
+### Card Selection
+
+The following inclusion and exclusion rules were applied to the MTGJSON AtomicCards dataset to produce the filtered dataset atomiccards_paper_constructed.json.
 
 **Included**
 
-Cards are retained if they meet all of the following:
+This project filters MTGJSON AtomicCards to a paper-constructed analytical scope rather than retaining the full source universe. Cards are included when they are legal or restricted in at least one selected paper-constructed format and are represented as fully released physical cards suitable for deck construction.
 
-Playable in at least one paper-constructed format
-(Commander, Oathbreaker, Standard, Pioneer, Modern, Legacy, Vintage, Pauper, Penny Dreadful, Premodern, or Old School)
-with legality status Legal or Restricted.
-
-Fully released, physical cards that can be used in a playable deck — not tokens, emblems, schemes, or other digital-only content.
 
 **Excluded**
 
-Cards were excluded if any of these conditions applied:
+Exclusions remove records that would distort card-design analysis or add non-comparable entities to the modeled dataset, including humor/acorn cards, non-constructed game objects, draft-only conspiracy-style content, reversible duplicate layouts, and cards printed exclusively in un-set products.
 
-- Humor/Acorn cards (isFunny=True) from Un-sets or other joke products.
-- Non-constructed layouts, including tokens, emblems, schemes, vanguards, planes, phenomena, attractions, stickers, or contraptions.
-- "reversible" layouts - which are reprints of existing cards, with the same card on both faces, but with different art. These would result in duplicates in the dataset.
-- Conspiracy-type cards, which are draft-only mechanics and not used in constructed play.
-- Cards only printed in “Un-sets” (UGL, UNH, UNST, UND, UNF), even if technically legal in Commander or Legacy.
-    - Rationale: While some Un-set cards (e.g. from Unfinity) are Commander-legal, these sets were designed as experimental products that intentionally break normal mechanical and color-pie conventions.
-    - Excluding them improves dataset consistency for downstream analyses focused on color identity and core design patterns.
+### Set Selection
 
-## Set Selection
+The following exclusion rules were applied to the MTGJSON Sets dataset to produce the filtered dataset setlist_paper_constructed.json.
 
 Excluded only sets that are definitively not for paper constructed play:
 - flagged "Online Only"
 - set types "memorabilia" (art cards), "tokens" (temporary indicators), or "minigames" (separate product from MTG)
-
-- Also removed the 'Media and Collaboration Promos' (PMEI) set because it causes issues with card release date analysis.
- - The set was originally released in 1995, but continues to have new printings added to it, which makes it an outlier that skews analysis of card release trends over time.
+- UNSET set codes. Cards printed exclusively in defined un-set products are excluded to avoid mixing intentionally experimental designs into analyses of mainstream card-design patterns.
+- PMEI set code. The PMEI set is excluded because its release metadata behaves as a long-running promotional grouping rather than a standard comparable set release, which would otherwise distort time-based set analysis.
 
 ## Staging Tables
 
@@ -42,11 +35,15 @@ Core challenge - the product has had many layout variations of cards over it's 3
 The cleanest way to handle this was to create separate tables for a grain of card and a grain of face. Each card is related to one or more faces.
 The allows clean analysis of features that are inherent to the entire physical card, as well as features that are face-specific.
 
-Some fields (e.g. power, toughness) are generally numeric, but sometimes are variable (e.g. "*+1), therefore these fields are maintained as strings in the staging tables
+data/schemas.json defines the expected structure of both staging and warehouse outputs. The staging pipeline uses it as the source of truth for required columns, target dtypes, and validation checks before parquet outputs are written.
+
+Some fields (e.g. power, toughness) are generally numeric, but sometimes are variable (e.g. "*+1), therefore these fields are maintained as strings in the staging tables.
+
+Staging null-handling is applied before schema coercion so that fields representing “not applicable” can remain null where meaningful, while fields used as normalized analytical attributes are filled to stable defaults.
 
 ## Warehouse Tables
 
-Added numeric columns for fields (e.g. power, toughness) that are generally numeric and added flag columns to indicate where the values are not numeric and are instead variable.
+core_card_faces keeps printed stat fields in their original text form while adding numeric versions and variable-value flags, allowing later analysis to distinguish numeric creature stats from special or symbolic values.
 
 ### Semantive View Layer
 

@@ -29,8 +29,9 @@ Final business queries are executed separately through [run_queries](../scripts/
 ## Extract
 
 **[extract_mtgjson_data.py](../scripts/extract_mtgjson_data.py)** 
-Downloads the MTGJSON AtomicCards dataset, verifies download integrity using the published SHA256 hash, and extracts the archive.
+This step establishes a reproducible, integrity-checked raw data foundation before project-specific filtering and transformation begin.
 
+Downloads the MTGJSON AtomicCards dataset, verifies download integrity using the published SHA256 hash, and extracts the archive.
 The script also records metadata about the source dataset for reproducibility and provenance.
 
 Outputs to /data/raw
@@ -49,7 +50,7 @@ This step reduces the full dataset to the subset relevant for deckbuilding and g
 
 Outputs to /data/selected
 
-**[created_staging_tables.py]**
+**[build_staging_tables.py]**
 Normalizes the curated JSON dataset into structured pandas DataFrames then saves into Parquet files.
 
 This step flattens the nested AtomicCards structure and prepares tables representing cards, faces, types, keywords, and sets.
@@ -58,9 +59,9 @@ Outputs to /data/staging.
 
 
 **[build_core_tables.py]**
-Creates core analytics-ready warehouse tables by adding derived features, flags, and analysis-friendly fields.
+This warehouse layer derives stable analytical features from staging outputs while preserving selected nested source attributes needed for downstream semantic modeling.
 
-Outputs both CSV and Parquet versions for compatibility with common analytics tools.
+Canonical warehouse outputs are written as parquet, with preview CSVs included for quick inspection.
 
 Outputs to /data/warehouse
 

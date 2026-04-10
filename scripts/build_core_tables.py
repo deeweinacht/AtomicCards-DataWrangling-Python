@@ -1,18 +1,20 @@
 """
-Build core tables from staging data.
-
-Transforms staging tables into analytics-ready warehouse tables by adding derived features, flags, and analysis-friendly fields.
-Outputs both CSV and Parquet versions for compatibility with common analytics tools.
-Outputs to /data/warehouse.
+Build warehouse-layer core tables from staging tables.
+This step derives analysis-ready card- and face-level features, preserves selected nested source attributes,
+and writes canonical parquet outputs plus reviewer-friendly preview CSVs.
 
 Tables: cards, card_faces, keywords, types, sets.
+
+core_cards contains one row per card with aggregated face, type, legality, and printing features.
+core_card_faces contains one row per face with numeric stat derivations and variable-value flags.
+core_keywords, core_types, and core_sets preserve normalized supporting dimensions at stable warehouse grain.
 """
 
 from pathlib import Path
 import json
 import pandas as pd
+from pandas.api import types as pd_types
 from typing import Dict, Any
-from build_staging_tables import validate_staging_dataframes
 
 INPUT_DIR = Path("data/staging")
 OUTPUT_DIR = Path("data/warehouse")
@@ -20,7 +22,7 @@ PREVIEW_DIR = Path("data/output/previews")
 SCHEMAS_FILE = Path("data/schemas.json")
 TABLE_SCHEMAS = {}
 
-report = {}
+report = {"read_errors": []}
 
 
 def load_table_schemas() -> None:
@@ -35,37 +37,47 @@ def read_staging_tables(input_dir: Path) -> Dict[str, pd.DataFrame]:
     Returns dict of DataFrames.
     """
     dfs = {}
+
+    print("Reading staging tables...")
     for table in TABLE_SCHEMAS["staging_tables"].keys():
         parquet_path = input_dir / f"stg_{table}.parquet"
         if parquet_path.exists():
             dfs[table] = pd.read_parquet(parquet_path)
         else:
-            report["read_errors"].append(f"Missing staging file for {table}")
+            report["read_errors"].append(f"Could not read staging file for {table}")
+
+    if report["read_errors"]:
+        save_warehouse_report()
+        raise FileNotFoundError(
+            "Missing staging file(s) for build, aborting. See warehouse_report.json for details."
+        )
     return dfs
 
 
 def build_tables(dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
     """
-    Build analytics tables from staging.
+    Build core warehouse tables from staging.
     """
-    analytics = {}
-    analytics["card_faces"] = build_faces_core(dfs["faces"])
-    analytics["cards"] = build_cards_core(
+    core_tables = {}
+
+    print("Building core tables using staging data...")
+    core_tables["card_faces"] = build_faces_core(dfs["faces"])
+    core_tables["cards"] = build_cards_core(
         dfs["cards"],
-        analytics["card_faces"],
+        core_tables["card_faces"],
         dfs["types"],
         dfs["keywords"],
         dfs["sets"],
     )
-    analytics["keywords"] = build_keywords_core(dfs["keywords"])
-    analytics["types"] = build_types_core(dfs["types"])
-    analytics["sets"] = build_sets_core(dfs["sets"])
-    return analytics
+    core_tables["keywords"] = build_keywords_core(dfs["keywords"])
+    core_tables["types"] = build_types_core(dfs["types"])
+    core_tables["sets"] = build_sets_core(dfs["sets"])
+    return core_tables
 
 
 def build_faces_core(staging_df: pd.DataFrame) -> pd.DataFrame:
     """
-    Derive analytics for card faces: power, toughness, loyalty, defense, mana_cost, pt_ratio.
+    Derive analytic features for card faces: power, toughness, loyalty, defense, mana_cost, pt_ratio.
     """
     core_df = staging_df.copy()
     core_df["power_num"] = pd.to_numeric(core_df["power"], errors="coerce").astype(
@@ -79,7 +91,7 @@ def build_faces_core(staging_df: pd.DataFrame) -> pd.DataFrame:
     )
     core_df["defense_num"] = pd.to_numeric(core_df["defense"], errors="coerce").astype(
         "Float64"
-    )  # never variable, so the variable flag is not added for this one
+    )  # defense is never variable, so the variable flag is not added for defense
     core_df["power_is_variable"] = (
         core_df["power"].notnull() & core_df["power_num"].isnull()
     )
@@ -96,7 +108,9 @@ def build_faces_core(staging_df: pd.DataFrame) -> pd.DataFrame:
         "Float64"
     )
 
-    temp_extracted_colors = core_df["colors"].apply(lambda x: set(list(x)))
+    temp_extracted_colors = core_df["colors"].apply(
+        lambda x: set(list(x) if x.any() else set())
+    )
     core_df["is_colorless"] = temp_extracted_colors.apply(
         lambda colors: len(colors) == 0
     ).astype("bool")
@@ -127,9 +141,9 @@ def build_cards_core(
     sets_df: pd.DataFrame,
 ) -> pd.DataFrame:
     """
-    Derive analytics for cards: colors, text, types, printings from faces/joins.
+    Derive analytic features for cards: colors, text, types, printings from faces/joins.
     """
-    # Rename 'id' to 'card_id' so it matches the results of our groupbys and joins from other tables
+    # Temporarily rename 'id' to 'card_id' so it matches the results of our groupbys and joins from other tables
     core_df = cards_df.copy().rename(columns={"id": "card_id"}).set_index("card_id")
 
     core_df["face_count"] = (
@@ -275,26 +289,49 @@ def build_sets_core(sets_df: pd.DataFrame) -> pd.DataFrame:
     return sets_df.drop_duplicates().sort_values("id").reset_index(drop=True)
 
 
-def validate_warehouse_schema(analytics: Dict[str, pd.DataFrame]) -> Dict[str, Any]:
+def column_matches_dtype(column: pd.Series, target_dtype: str) -> bool:
+    if target_dtype == "Int64":
+        return pd_types.is_integer_dtype(column) and str(column.dtype) == "Int64"
+    if target_dtype in ("Float64", "float64"):
+        return pd_types.is_float_dtype(column) and str(column.dtype) in (
+            "Float64",
+            "float64",
+        )
+    if target_dtype == "datetime64[ns]":
+        return pd_types.is_datetime64_any_dtype(column)
+    if target_dtype == "category":
+        return str(column.dtype) == "category"
+    if target_dtype == "bool":
+        return pd_types.is_bool_dtype(column)
+    if target_dtype == "str":
+        return pd_types.is_string_dtype(column)
+    if target_dtype == "object":
+        return pd_types.is_object_dtype(column)
+    raise ValueError(f"Unsupported dtype: {target_dtype}")
+
+
+def validate_warehouse_schema(core_tables: Dict[str, pd.DataFrame]) -> Dict[str, Any]:
     """
-    Validate warehouse tables against schema (non-fatal).
+    Validate warehouse tables against schema.
     """
     validation_passed = True
     validation_failures = []
+
+    print("Validating warehouse tables against schema...")
     for table_type, table_definition in TABLE_SCHEMAS["warehouse_tables"].items():
-        if table_type not in analytics.keys():
+        if table_type not in core_tables.keys():
             validation_failures.append(f"Missing warehouse table: {table_type}")
             continue  # if the table is missing, we can't run any further validations on it, so we skip to the next table
-        df = analytics[table_type]
+        df = core_tables[table_type]
         for column, dtype in table_definition.items():
             if column not in df.columns:
                 validation_failures.append(
-                    f'Expected column "{column}" is missing from {table_type} analytics table.'
+                    f'Expected column "{column}" is missing from {table_type} table.'
                 )
                 continue  # if the column is missing, we can't run any further validations on it, so we skip to the next column
-            if df[column].dtype != dtype:
+            if not column_matches_dtype(df[column], dtype):
                 validation_failures.append(
-                    f'Column "{column}" in {table_type} analytics table has dtype {df[column].dtype} but expected {dtype}.'
+                    f'Column "{column}" in {table_type} table has dtype {df[column].dtype} but expected {dtype}.'
                 )
 
     if validation_failures:
@@ -302,19 +339,29 @@ def validate_warehouse_schema(analytics: Dict[str, pd.DataFrame]) -> Dict[str, A
 
     report["schema_validation_passed"] = validation_passed
     report["schema_validation_failures"] = validation_failures
+
+    if not validation_passed:
+        print(f"Schema validation failed: {validation_failures}")
+        save_warehouse_report()
+        raise ValueError("Schema validation failed. Aborting build.")
+    else:
+        print("Schema validation passed.")
+
     return {
         "schema_validation_passed": validation_passed,
         "schema_validation_failures": validation_failures,
     }
 
 
-def save_warehouse_tables(analytics: Dict[str, pd.DataFrame]) -> None:
+def save_warehouse_tables(core_tables: Dict[str, pd.DataFrame]) -> None:
     """
-    Save warehouse tables to CSV and Parquet.
+    Save warehouse tables to Parquet and output preview CSVs.
     """
-
+    print("Saving warehouse tables...")
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    PREVIEW_DIR.mkdir(parents=True, exist_ok=True)
     row_counts = {}
-    for table, df in analytics.items():
+    for table, df in core_tables.items():
         # CSV: stringify objects
         csv_df = df.copy()
         for col in df.select_dtypes(include=["object"], exclude=["string"]).columns:
@@ -332,10 +379,11 @@ def save_warehouse_tables(analytics: Dict[str, pd.DataFrame]) -> None:
     report["row_counts"] = row_counts
 
 
-def save_warehouse_report(report: Dict[str, Any]) -> None:
+def save_warehouse_report() -> None:
     """
     Save report to JSON.
     """
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     report_path = OUTPUT_DIR.joinpath("warehouse_report.json")
     with open(report_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, default=str)
@@ -344,19 +392,16 @@ def save_warehouse_report(report: Dict[str, Any]) -> None:
 def build_warehouse_core_tables():
     load_table_schemas()
     staging_dfs = read_staging_tables(INPUT_DIR)
-    validate_staging_dataframes(staging_dfs)
-    analytics_dfs = build_tables(staging_dfs)
-    schema_validation_results = validate_warehouse_schema(analytics_dfs)
+    warehouse_dfs = build_tables(staging_dfs)
+    schema_validation_results = validate_warehouse_schema(warehouse_dfs)
 
     print(
         "Warehouse tables schema validation results:",
         json.dumps(schema_validation_results, indent=2),
     )
 
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    PREVIEW_DIR.mkdir(parents=True, exist_ok=True)
-    save_warehouse_tables(analytics_dfs)
-    save_warehouse_report(report)
+    save_warehouse_tables(warehouse_dfs)
+    save_warehouse_report()
     print("Warehouse tables built successfully. See warehouse_report.json for details.")
 
 

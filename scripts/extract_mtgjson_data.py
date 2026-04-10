@@ -1,5 +1,6 @@
 """
-Downloads and extracts the MTGJSON AtomicCards and SetList datasets, including verifying the download integrity and saving metadata about the extraction process.
+Download, verify, and extract the MTGJSON AtomicCards and SetList datasets,
+then save source-level metadata for each extracted dataset.
 """
 
 import hashlib
@@ -30,7 +31,7 @@ OUT_DIR = Path("data/raw")
 
 
 def download_file(url: str, path: Path):
-    request = requests.get(url, stream=True)
+    request = requests.get(url, stream=True, timeout=60)
     request.raise_for_status()
 
     with open(path, "wb") as f:
@@ -48,12 +49,17 @@ def compute_sha256(path: Path):
 
 
 def extract_xz(archive_path: Path, out_path: Path):
+    CHUNK_SIZE = 1024 * 1024  # 1MB
     with lzma.open(archive_path) as f_in:
         with open(out_path, "wb") as f_out:
-            f_out.write(f_in.read())
+            while True:
+                chunk = f_in.read(CHUNK_SIZE)
+                if not chunk:
+                    break
+                f_out.write(chunk)
 
 
-def extract(outdir: Path, dataset: dict):
+def process_dataset(outdir: Path, dataset: dict):
     raw_dir = outdir
     raw_dir.mkdir(parents=True, exist_ok=True)
 
@@ -85,30 +91,33 @@ def extract(outdir: Path, dataset: dict):
         raw = json.load(f)
         date_str = raw.get("meta", {}).get("date", "unknown")
         ver_str = raw.get("meta", {}).get("version", "unknown")
+        json_size = len(json_path.read_bytes())
 
     metadata = {
         "source": "MTGJSON",
         "dataset": dataset["name"],
         "download_url": archive_url,
         "downloaded_at": datetime.now(timezone.utc).isoformat(),
-        "sha256_verified": True,
         "archive_name": dataset["file"],
         "data_date": date_str,
         "data_version": ver_str,
+        "json_size_bytes": json_size,
+        "sha256_verified": True,
+        "expected_sha256": expected_hash,
+        "actual_sha256": actual_hash,
     }
 
     meta_path = raw_dir.joinpath(f"{dataset['name']}Source.json")
     meta_path.write_text(json.dumps(metadata, indent=2))
 
     print(f"{dataset['name']} extraction complete")
-    print(f"JSON saved to {json_path}")
+    print(f"JSON saved to {json_path}, metadata saved to {meta_path}")
 
 
 def extract_mtgjson_datasets():
-    print("Extracting MTGJSON datasets...")
     for dataset in DATASET_METADATA:
-        print(f"\nProcessing {dataset['name']}...")
-        extract(OUT_DIR, dataset)
+        print(f"\nExtracting {dataset['name']} from MTGJSON...")
+        process_dataset(OUT_DIR, dataset)
     print("\nAll extractions complete.")
 
 

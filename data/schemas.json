@@ -73,6 +73,7 @@
             "type_count": "Int64",
             "keyword_count": "Int64",
             "first_printing_date": "datetime64[ns]",
+            "first_printing_set": "str",
             "legalities_count": "Int64",
             "rulings_count": "Int64",
             "printings_count": "Int64",

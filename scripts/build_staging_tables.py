@@ -1,13 +1,28 @@
-"""Iterates through the paper selected cards JSON and transforms into staging tables"""
+"""
+Builds normalized staging tables from the filtered MTGJSON card and set extracts.
+
+The staging layer preserves source fidelity while normalizing records to explicit analytical grains
+
+Staging schemas are defined in data/schemas.json
+Table grains:
+    stg_cards: one row per card
+    stg_faces: one row per card face
+    stg_keywords: one row per card-keyword pair
+    stg_types: one row per face-type pair
+    stg_sets: one row per set
+
+The staging build step applies explicit pandas dtype coercion by target column type and validates each output table against the expected schema before writing parquet outputs.
+"""
 
 from slugify import slugify
 import json
 import pandas as pd
+from pandas.api import types as pd_types
 from pathlib import Path
 
 
-CARDS_PAPER_CONSTRUCTED_DATA = Path("data/selected/atomiccards_paper_constructed.json")
-SETS_PAPER_CONSTRUCTED_DATA = Path("data/selected/setlist_paper_constructed.json")
+CARDS_PAPER_CONSTRUCTED_DATA = Path("data/filtered/atomiccards_paper_constructed.json")
+SETS_PAPER_CONSTRUCTED_DATA = Path("data/filtered/setlist_paper_constructed.json")
 OUT_DIR = Path("data/staging")
 PREVIEWS_DIR = Path("data/output/previews")
 REPORT = {}
@@ -25,10 +40,16 @@ def load_staging_schema() -> None:
     with open(SCHEMAS_FILE, "r", encoding="utf-8") as f:
         table_schemas = json.load(f)
     STAGING_SCHEMA = table_schemas["staging_tables"]
+    print("Creating staging tables: ", STAGING_SCHEMA.keys())
 
 
 def build_card_row(card_name: str, faces: list) -> dict:
-    # For simplicity, card-level fields are taken from the first face, as these should be consistent across faces.
+    """
+    For card-level staging fields, values are sourced from the first face under the assumption
+    that selected card-level attributes are consistent across a card’s face records in MTGJSON.
+    Face-specific attributes are modeled separately in stg_faces.
+    """
+
     card_row = {}
     front_face = faces[0] if len(faces) > 0 else {}
 
@@ -125,6 +146,24 @@ def build_set_row(set: dict) -> dict:
     }
 
 
+def coerce_column_to_type(column: pd.Series, target_dtype: str) -> pd.Series:
+    if target_dtype == "Int64":
+        return pd.to_numeric(column, errors="coerce").astype("Int64")
+    if target_dtype in ("Float64", "float64"):
+        return pd.to_numeric(column, errors="coerce").astype("Float64")
+    if target_dtype == "datetime64[ns]":
+        return pd.to_datetime(column, errors="coerce")
+    if target_dtype == "category":
+        return column.astype("category")
+    if target_dtype == "bool":
+        return column.fillna(False).astype("bool")
+    if target_dtype == "str":
+        return column.astype("string")
+    if target_dtype == "object":
+        return column.astype("object")
+    raise ValueError(f"Unsupported dtype: {target_dtype}")
+
+
 def create_staging_dataframes():
     """Load card data from JSON and create initial DataFrames for staging tables."""
     card_rows = []
@@ -206,28 +245,20 @@ def apply_staging_schema(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame
     """Apply type conversions to match the staging schema."""
     schema_errors = []
     for table_type, table_definition in STAGING_SCHEMA.items():
+        df = dfs.get(table_type)
+        if df is None:
+            schema_errors.append(f'Expected staging table "{table_type}" is missing.')
+            continue
+
         for column, dtype in table_definition.items():
-            df = dfs.get(table_type)
-            if df is None:
-                schema_errors.append(
-                    f'Expected staging table "{table_type}" is missing.'
-                )
-                continue
             if column not in df.columns:
                 schema_errors.append(
                     f'Expected column "{column}" is missing from {table_type} staging table.'
                 )
                 pass
             else:
-                if dtype in ["Int64", "float64", "bool"] and df[column].dtype == "str":
-                    try:
-                        df[column] = pd.to_numeric(df[column], errors="coerce")
-                    except Exception as e:
-                        schema_errors.append(
-                            f'Could not convert column "{column}" in {table_type} staging table to numeric type {dtype}: {e}'
-                        )
                 try:
-                    dfs[table_type][column] = dfs[table_type][column].astype(dtype)
+                    dfs[table_type][column] = coerce_column_to_type(df[column], dtype)
                 except Exception as e:
                     schema_errors.append(
                         f'Could not convert column "{column}" in {table_type} staging table to type {dtype}: {e}'
@@ -237,7 +268,7 @@ def apply_staging_schema(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame
 
 
 def sort_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
-    """Sort staging tables for consistency."""
+    """Sorts staging tables for deterministic output."""
 
     if "cards" in dfs:
         dfs["cards"] = dfs["cards"].sort_values("id").reset_index(drop=True)
@@ -260,11 +291,34 @@ def sort_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict[str, pd.DataFr
     return dfs
 
 
+def column_matches_dtype(column: pd.Series, target_dtype: str) -> bool:
+    if target_dtype == "Int64":
+        return pd_types.is_integer_dtype(column) and str(column.dtype) == "Int64"
+    if target_dtype in ("Float64", "float64"):
+        return pd_types.is_float_dtype(column) and str(column.dtype) in (
+            "Float64",
+            "float64",
+        )
+    if target_dtype == "datetime64[ns]":
+        return pd_types.is_datetime64_any_dtype(column)
+    if target_dtype == "category":
+        return str(column.dtype) == "category"
+    if target_dtype == "bool":
+        return pd_types.is_bool_dtype(column)
+    if target_dtype == "str":
+        return pd_types.is_string_dtype(column)
+    if target_dtype == "object":
+        return pd_types.is_object_dtype(column)
+    raise ValueError(f"Unsupported dtype: {target_dtype}")
+
+
 def validate_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict:
     """Validate staging tables against schema requirements."""
 
     validation_passed = True
     validation_failures = []
+
+    print("Validating staging tables...")
     for table_type, table_definition in STAGING_SCHEMA.items():
         df = dfs.get(table_type)
         if df is None:
@@ -278,7 +332,7 @@ def validate_staging_dataframes(dfs: dict[str, pd.DataFrame]) -> dict:
                     f'Expected column "{column}" is missing from {table_type} staging table.'
                 )
                 continue  # if the column is missing, we can't run any further validations on it, so we skip to the next column
-            if df[column].dtype != dtype:
+            if not column_matches_dtype(df[column], dtype):
                 validation_failures.append(
                     f'Column "{column}" in {table_type} staging table has incorrect type. Expected {dtype}, got {df[column].dtype}.'
                 )
@@ -328,13 +382,17 @@ def save_staging_tables(dfs: dict[str, pd.DataFrame]) -> None:
         df.to_parquet(table_path, index=False)
 
         row_counts[table_type] = len(df)
+    print("Staging tables saved.")
     REPORT["row_counts"] = row_counts
 
 
 def save_staging_report():
     error_count = 0
-    for values in REPORT.values():
-        error_count += len(values) if isinstance(values, list) else 0
+    error_count = (
+        len(REPORT["missing_value_errors"])
+        + len(REPORT["schema_errors"])
+        + len(REPORT["validation_failures"])
+    )
     REPORT["total_errors"] = error_count
 
     report_path = OUT_DIR.joinpath("staging_report.json")

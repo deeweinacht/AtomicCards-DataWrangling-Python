@@ -22,19 +22,19 @@ def main():
     print("Step 1/5: Extracting MTGJSON datasets...")
     extract_mtgjson_datasets()
 
-    print("Step 2/5: Filtering cards and sets by paper constructed scope...")
+    print("\nStep 2/5: Filtering cards and sets by paper constructed scope...")
     filter_for_paper_constructed()
 
-    print("Step 3/5: Building staging tables...")
+    print("\nStep 3/5: Building staging tables...")
     build_staging_tables()
 
-    print("Step 4/5: Building warehouse core tables...")
+    print("\nStep 4/5: Building warehouse core tables...")
     build_warehouse_core_tables()
 
-    print("Step 5/5: Loading core tables into DuckDB analytics layer...")
+    print("\nStep 5/5: Loading core tables into DuckDB analytics layer...")
     load_core_tables_into_duckdb()
 
-    print("ETL pipeline complete.")
+    print("\nETL pipeline complete.")
 
 
 if __name__ == "__main__":

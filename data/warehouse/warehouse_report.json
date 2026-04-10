@@ -1,4 +1,5 @@
 {
+  "read_errors": [],
   "schema_validation_passed": true,
   "schema_validation_failures": [],
   "row_counts": {
@@ -6,6 +7,6 @@
     "cards": 30530,
     "keywords": 20508,
     "types": 68576,
-    "sets": 661
+    "sets": 650
   }
 }
