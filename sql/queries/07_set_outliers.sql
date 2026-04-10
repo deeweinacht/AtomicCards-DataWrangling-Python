@@ -1,5 +1,11 @@
--- Identifies the top 10 sets that deviate most from the average set design profile.
--- Ranks by calculating a set_outlier_score by totaling a set's z-scores for a number of key set metrics. 
+/*
+Ranks sets by a composite design-deviation score built from standardized differences across key set-level metrics
+to identify sets that may deviate from expected design patterns.
+
+Ddesign-deviation score is derived from absolute z-scores across mana, complexity, type-share, and color-category metrics.
+
+A z-score is the number of standard deviations by which a value is above or below the mean value of that metric.
+*/
 
 with global_stats as (
     select
@@ -29,7 +35,9 @@ with global_stats as (
 ),
 z_scores as (
     select
-        sdp.set_name,
+        sdp.set_name as set_name,
+        sdp.release_year as release_year,
+        sdp.set_type as set_type,
         abs(sdp.avg_mana_value - g_mana) / nullif(g_mana_stdev, 0) as mana_z_score,
         abs(sdp.avg_complexity_score - g_complexity) / nullif(g_complexity_stdev, 0) as complexity_z_score,
         abs(sdp.creature_type_share - g_creatures) / nullif(g_creatures_stdev, 0) as creature_z_score,
@@ -47,15 +55,17 @@ z_scores as (
 )
 select
     set_name,
+    release_year,
+    set_type,
     round((mana_z_score +
         complexity_z_score +
         (creature_z_score + artifact_z_score + enchantment_z_score + instant_z_score + sorcery_z_score + land_z_score)/6.0 +
         (colorless_z_score + mono_z_score + multi_z_score)/3.0
-    ), 2) as set_outlier_score,
+    ), 2) as set_design_deviation_score,
     round(mana_z_score, 3) as mana_cost_z_score,
     round(complexity_z_score, 3) as complexity_z_score,
     round((creature_z_score + artifact_z_score + enchantment_z_score + instant_z_score + sorcery_z_score + land_z_score)/6.0, 3) as card_types_z_score,
     round((colorless_z_score + mono_z_score + multi_z_score)/3.0, 3) as color_types_z_score
 from z_scores
-order by set_outlier_score desc
+order by set_design_deviation_score desc
 limit 10;

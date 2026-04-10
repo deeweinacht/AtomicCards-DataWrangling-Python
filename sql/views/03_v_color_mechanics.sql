@@ -1,3 +1,8 @@
+/*
+One row per card-keyword observation joined to card color structure, used for mechanic prevalence and color-concentration analysis.
+
+color_category classifies cards into colorless, monocolored, and multicolored buckets to support mechanic distribution analysis at different color granularities.
+*/
 create or replace view analytics.v_color_mechanics as
     select
         keywords.card_id as card_id,

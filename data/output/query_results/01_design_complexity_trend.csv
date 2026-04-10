@@ -1,8 +1,8 @@
-release_period,avg_text_tokens,avg_rulings_count,avg_complexity_score,percent_multicolored_cards,percent_multiface_cards
-1993-1995,21,1.13,27,6,0
-1996-2000,20,0.8,24,3,0
-2001-2005,22,0.92,26,6,1
-2006-2010,24,1.88,34,19,1
-2011-2015,23,2.32,35,12,1
-2016-2020,27,2.93,42,14,3
-2021-Present,36,3.15,52,18,5
+release_period,avg_text_tokens_per_card,avg_rulings_count_per_card,avg_design_complexity_score,percent_multicolored_cards,percent_multiface_cards
+1993-1995,22,1.05,33,6,0
+1996-2000,19,0.81,27,4,0
+2001-2005,23,0.97,32,5,1
+2006-2010,24,2.14,45,17,0
+2011-2015,24,2.46,49,13,1
+2016-2020,28,3.03,58,15,3
+2021-Present,37,3.1,68,19,5

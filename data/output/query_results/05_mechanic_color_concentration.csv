@@ -1,4 +1,4 @@
-mechanic,dominant_color,dominant_concentration,runner_up_color,runner_up_concentration,concentration_gap,mono_colored_card_instances,total_card_instances
+mechanic,dominant_color,dominant_concentration,runner_up_color,runner_up_concentration,concentration_gap,mono_colored_cards_with_mechanic,total_cards_with_mechanic
 Haste,Red,0.827,Green,0.094,0.733,394,595
 Fight,Green,0.809,Red,0.181,0.628,94,130
 Reach,Green,0.792,Red,0.17,0.622,283,361
@@ -30,16 +30,16 @@ Double strike,White,0.526,Red,0.462,0.064,78,111
 Delirium,Green,0.306,Black,0.242,0.064,62,73
 Crew,Blue,0.288,White,0.233,0.055,73,165
 Surveil,Blue,0.452,Black,0.4,0.052,115,186
-Kicker,Green,0.248,Red,0.206,0.042,214,225
 Flying,Blue,0.351,White,0.309,0.042,2265,2961
+Kicker,Green,0.248,Red,0.206,0.042,214,225
 Defender,Blue,0.29,White,0.252,0.038,238,304
 Enchant,Blue,0.271,White,0.239,0.032,1157,1221
 Proliferate,Blue,0.354,Green,0.323,0.031,65,93
 Threshold,Black,0.279,Green,0.256,0.023,86,98
 Cycling,Blue,0.242,White,0.221,0.021,289,375
 Transform,Black,0.217,White,0.205,0.012,258,380
-Partner,Blue,0.218,Black,0.207,0.011,87,129
 Equip,White,0.296,Red,0.285,0.011,186,561
+Partner,Blue,0.218,Black,0.207,0.011,87,129
 Typecycling,Blue,0.219,Red,0.219,0.0,64,78
 Landcycling,Red,0.213,White,0.213,0.0,61,75
 Suspend,Blue,0.219,Red,0.219,0.0,64,70

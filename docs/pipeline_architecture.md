@@ -68,11 +68,7 @@ Outputs to /data/warehouse
 ## Load
 
 **[load_into_analytics_database.py]**
-The pipeline loads curated warehouse outputs into a DuckDB-based analytics serving layer by registering core.* and analytics.* views over parquet-backed datasets.
-
-This provides a SQL query layer without duplicating storage, enabling efficient analytical queries.
-
-**[add_semantic_layer.py]**
+The load step initializes a local DuckDB analytics database, registers warehouse parquet outputs as core.* views, and builds business-facing analytics.* semantic views from version-controlled SQL files.
 
 Adds 4 semantic layer analytics views on top of the warehouse tables.
 
@@ -93,5 +89,6 @@ Adds 4 semantic layer analytics views on top of the warehouse tables.
 
 ## Query
 
+**[run_queries.py]**
 Querying the DuckDB views to answer product and design questions.
 

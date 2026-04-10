@@ -1,16 +1,21 @@
-mechanic,white_percentage,blue_percentage,black_percentage,red_percentage,green_percentage,mono_colored_card_count,all_card_count
-Flying,23.6,26.8,16.4,8.0,1.6,2265,2961
-Enchant,22.6,25.6,17.1,13.3,16.1,1157,1221
-Trample,1.7,1.8,6.2,20.2,38.5,631,921
-Vigilance,40.2,8.6,0.2,0.3,13.8,411,651
-Haste,0.2,0.3,4.7,54.8,6.2,394,595
-Equip,9.8,3.7,5.5,9.4,4.6,186,561
-Flash,21.1,32.0,10.2,5.7,12.1,454,560
-Mill,0.4,32.1,22.0,1.7,13.8,381,545
-Scry,16.4,34.1,7.4,7.8,5.9,292,408
-Transform,13.9,13.2,14.7,12.4,13.7,258,380
-Cycling,17.1,18.7,12.8,15.2,13.3,289,375
-Reach,2.2,0.0,0.8,13.3,62.0,283,361
-First strike,35.5,0.8,6.4,29.1,1.4,262,358
-Menace,0.0,0.3,41.0,26.6,0.3,238,349
-Lifelink,34.8,0.0,28.5,0.0,0.0,211,333
+mechanic,percent_mono_white_cards,percent_mono_blue_cards,percent_mono_black_cards,percent_mono_red_cards,percent_mono_green_cards,mono_colored_cards_with_mechanic
+Flying,15.2,17.8,10.7,5.2,1.1,2265
+Enchant,6.0,7.0,4.6,3.6,4.4,1157
+Trample,0.3,0.4,1.3,4.1,7.9,631
+Flash,2.6,4.0,1.3,0.7,1.5,454
+Vigilance,5.7,1.3,0.0,0.0,2.0,411
+Haste,0.0,0.0,0.6,7.2,0.8,394
+Mill,0.0,3.9,2.6,0.2,1.7,381
+Scry,1.5,3.1,0.7,0.7,0.5,292
+Cycling,1.4,1.6,1.1,1.3,1.1,289
+Reach,0.2,0.0,0.1,1.1,5.0,283
+First strike,2.7,0.1,0.5,2.3,0.1,262
+Transform,1.1,1.1,1.2,1.0,1.2,258
+Defender,1.3,1.5,0.7,0.8,1.0,238
+Menace,0.0,0.0,3.2,2.0,0.0,238
+Kicker,0.7,1.0,0.9,1.0,1.2,214
+Treasure,0.2,0.3,1.1,2.5,0.6,212
+Lifelink,2.5,0.0,2.1,0.0,0.0,211
+Deathtouch,0.0,0.0,3.2,0.0,1.3,202
+Equip,1.2,0.5,0.7,1.2,0.6,186
+Flashback,0.5,0.8,0.6,1.1,0.9,172

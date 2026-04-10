@@ -1,12 +1,17 @@
--- Creates a design fingerprint for each expansion set by summarizing card complexity, mana value, color structure, and type prevalence within the set.
--- Expansion sets are primarily where new cards and mechanics are introduced, so this provides a way to track how design trends evolve at the set level over time. 
--- Note: type share values do not add up to 1.0 because cards may have multiple types.
+/*
+Creates a descriptive design fingerprint for each expansion set by summarizing card complexity, mana value, color structure, and type prevalence.
+
+Expansion sets are primarily where new cards and mechanics are introduced, so this provides a way to track how design trends evolve at the set level over time. 
+
+Note: type share values do not add up to 1.0 because cards may have multiple types.
+*/
 
 select 
     set_name,
     release_year,
+    paper_constructed_cards_in_set,
     round(avg_mana_value, 2) as avg_mana_value,
-    cast(avg_complexity_score as integer) as avg_complexity_score,
+    cast(avg_complexity_score as integer) as avg_complexity_score, --proxy metric for card design complexity, rulings are weighted higher than text density
     round(creature_type_share, 2) as creature_type_share,
     round(artifact_type_share, 2) as artifact_type_share,
     round(enchantment_type_share, 2) as enchantment_type_share,

@@ -1,3 +1,11 @@
+/*
+One row per card. 
+Provides card-level design attributes, first-print timing, color structure, type flags, and a project-defined design complexity proxy used in downstream trend analysis.
+
+design_complexity_score is a heuristic proxy combining printed text density with rulings volume
+it is intended to approximate card-design complexity, not formal rules burden.
+*/
+
 create or replace view analytics.v_card_design_features as
     with type_flags as (
         select
@@ -19,28 +27,28 @@ create or replace view analytics.v_card_design_features as
         EXTRACT('year' FROM cards.first_printing_date) as first_printing_year,
         cards.mana_value as mana_value,
         cards.color_identity as color_identity,
-        cards.color_count as color_count,
-        cards.is_colorless as is_colorless,
-        cards.is_mono as is_mono,
-        cards.is_multi as is_multi,
-        cards.is_white as is_white,
-        cards.is_blue as is_blue,
-        cards.is_black as is_black,
-        cards.is_red as is_red,
-        cards.is_green as is_green,
-        cards.face_count as face_count,
-        cards.text_length as text_length,
-        cards.text_tokens as text_tokens,
-        cards.rulings_count as rulings_count,
-        cards.printings_count as printings_count,
-        coalesce(cards.text_tokens, 0) + coalesce(cards.rulings_count*5, 0) as complexity_score,
-        type_flags.is_creature_card as is_creature,
-        type_flags.is_artifact_card as is_artifact,
-        type_flags.is_enchantment_card as is_enchantment,
-        type_flags.is_instant_card as is_instant,
-        type_flags.is_sorcery_card as is_sorcery,
-        type_flags.is_land_card as is_land,
-        type_flags.is_planeswalker_card as is_planeswalker
+        coalesce(cards.color_count, 0) as color_count,
+        coalesce(cards.is_colorless, false) as is_colorless,
+        coalesce(cards.is_mono, false) as is_mono,
+        coalesce(cards.is_multi, false) as is_multi,
+        coalesce(cards.is_white, false) as is_white,
+        coalesce(cards.is_blue, false) as is_blue,
+        coalesce(cards.is_black, false) as is_black,
+        coalesce(cards.is_red, false) as is_red,
+        coalesce(cards.is_green, false) as is_green,
+        coalesce(cards.face_count, 0) as face_count,
+        coalesce(cards.text_length, 0) as text_length,
+        coalesce(cards.text_tokens, 0) as text_tokens,
+        coalesce(cards.rulings_count, 0) as rulings_count,
+        coalesce(cards.printings_count, 0) as printings_count,
+        coalesce(cards.text_tokens, 0) + coalesce(cards.rulings_count*10, 0) as design_complexity_score, --proxy metric for card design complexity, rulings are weighted higher than text density
+        coalesce(type_flags.is_creature_card, false) as is_creature,
+        coalesce(type_flags.is_artifact_card, false) as is_artifact,
+        coalesce(type_flags.is_enchantment_card, false) as is_enchantment,
+        coalesce(type_flags.is_instant_card, false) as is_instant,
+        coalesce(type_flags.is_sorcery_card, false) as is_sorcery,
+        coalesce(type_flags.is_land_card, false) as is_land,
+        coalesce(type_flags.is_planeswalker_card, false) as is_planeswalker
         
     from core.cards as cards
     left join type_flags 
