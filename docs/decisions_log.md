@@ -1,3 +1,5 @@
+# Decisions Log
+
 ## Dataset Filtering
 
 This project focuses on cards relevant to real-world deckbuilding in paper-constructed formats. The MTG AtomicCards dataset was selected as the scope of this project is considering mechanically distinct products, where differences in art and printing are not relevant to the design questions and final analysis.
@@ -52,3 +54,30 @@ After loading curated warehouse tables into DuckDB, a semantic view layer was ad
 The semantic views are not 1:1 copies of warehouse tables. Instead, they encapsulate repeated joins, derived metrics, and standardized inclusion logic so that final SQL analyses remain concise, consistent, and easier to audit. This follows a common layered analytics pattern in which staging models standardize raw data, warehouse or core models preserve cleaned entities, and downstream semantic or mart models expose business-ready concepts for reporting and analysis.
 
 For this project, the semantic layer was introduced specifically to answer product/design questions about card design evolution, color identity stability, and set composition. Metrics such as complexity stand-ins or creature stat efficiency are interpretive analytical features rather than canonical source data, so they are defined in views rather than persisted back into the warehouse tables.
+
+### Semantic Metric Placement
+
+Interpretive analytical metrics such as `design_complexity_score`, `stat_total`, `stat_efficiency`, and set-level development profiles were defined in semantic views rather than persisted into warehouse tables.
+
+This keeps the warehouse layer closer to reusable modeled source truth while reserving analysis-specific logic and proxy metrics for the business-facing semantic layer.
+
+### Set-Level Profiling Logic
+
+Set-level design profiles are based on card membership across all recorded printings rather than only original printings.
+
+This decision was made so that set analysis reflects the composition of a set as printed, which is more useful for release-level design profiling, while acknowledging that this differs from a “newly introduced cards only” view of set design.
+
+## Storage and Query Engine
+
+### DuckDB as the Local Analytics Layer
+
+DuckDB was used as the local analytics engine to expose warehouse outputs through a lightweight semantic layer and support version-controlled SQL analysis without requiring an external database service.
+
+This choice keeps the project easy to run locally while still demonstrating warehouse-to-semantic-layer modeling patterns.
+
+### Parquet as the Warehouse Storage Format
+
+Staging and warehouse outputs are written as Parquet files rather than being persisted only inside DuckDB.
+
+This keeps intermediate and modeled datasets engine-agnostic, enables efficient columnar reads for analytical workloads, and separates transformation outputs from the query-serving layer.
+

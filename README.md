@@ -1,4 +1,5 @@
-# AtomicCards-DataWrangling-Python
+# MTGJSON Card Design Analytics Pipeline
+
 A reproducible ETL pipeline that ingests MTGJSON AtomicCards data and exports normalized relational tables suitable for product analytics.
 
 Taking the full MTGJson dataset and preparing it for product analysis for MTG design teams.
@@ -11,48 +12,18 @@ Taking the full MTGJson dataset and preparing it for product analysis for MTG de
 The project follows an ETL-style pipeline: raw MTGJSON files are extracted, filtered to the project’s analytical scope, transformed into curated staging and warehouse datasets, and then loaded into a DuckDB analytics layer implemented through views over parquet-backed outputs.
 
 
-# WORK IN PROGRESS
-
-
 ## Problem Statement:
 The game design / product analytics team needs a reliable card-design analytics layer to monitor how card characteristics evolve across releases, evaluate whether color identities remain distinct, and identify sets that deviate from expected design patterns.
 
 
-### Card Power Creep
-Has the power of cards increased over the history of the game?
-Are some sets, colors, card types more powerful than others?
+### Card Design Consistency
 
-Example metrics:
-A. Stat Efficiency (creatures only)
-(power + toughness) / mana_cost
-B. Keyword Density
-number of keywords (flying, haste, etc.)
-proxy for complexity / strength
-C. Text Length
-crude, but correlates with complexity/power creep
-D. Mana Efficiency Buckets
-low-cost vs high-impact cards
 
 ### Color Identity Stability
-Do colors maintain consistent identities?
-Are mechanics drifting between colors?
-Metrics:
-A. Mechanic frequency by color
-% of blue cards with flying, draw, etc.
-B. Color entropy (optional but impressive)
-how “spread out” mechanics are within a color
-C. Cross-color overlap
-how often mechanics appear outside their “home” color
+
 
 ### Set Design Consistency
-Are sets internally consistent?
-Do some sets deviate significantly?
 
-Metrics:
-A. Avg CMC per set
-B. Avg keyword count
-C. Creature vs non-creature ratio
-D. Mechanic distribution
 
 
 

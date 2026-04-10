@@ -1,45 +1,66 @@
 # Pipeline Architecture
 
+## Overview
+This project uses a layered local analytics pipeline to transform raw MTGJSON source data into business-facing analytical outputs. The workflow moves from raw ingestion and scope filtering to normalized staging tables, warehouse-layer feature modeling, DuckDB semantic views, and final analysis queries.
+
+## Data Flow
+
+1. Raw source ingestion into `data/raw`
+2. Project-scope filtering into `data/filtered`
+3. Normalized staging outputs in `data/staging`
+4. Warehouse-layer analytical tables in `data/warehouse`
+5. DuckDB semantic layer in `data/analytics`
+6. Query results in `data/output/query_results`
+
+See diagram for a visual overview of the project flow from raw source ingestion to final business query outputs:
+
+![Pipeline Diagram](./pipeline_diagram.png)
+
 ## Data Folder Structure
 
-data/
-  raw/        Original downloaded MTGJSON source files
-  selected/   Filtered source extracts restricted to paper-constructed scope
-  staging/    Intermediate normalized datasets used during transformation
-  warehouse/  Curated analytics-ready parquet outputs at stable business grains
-  analytics/  DuckDB database file used to expose the semantic/query layer
-  output/     Final query result exports and execution metadata
+- `data/raw/`        Original downloaded MTGJSON source files
+- `data/filtered/`   Filtered source extracts restricted to paper-constructed scope
+- `data/staging/`    Intermediate normalized datasets used during transformation
+- `data/warehouse/`  Curated analytics-ready parquet outputs at stable business grains
+- `data/analytics/`  DuckDB database used to expose the semantic and query layer
+- `data/output/`     Final query result exports, previews, and execution metadata
+
+## Architecture Justification
+
+This pipeline separates source-preserving normalization from analytical feature modeling. That separation keeps early-stage transformations close to source truth while reserving derived metrics and business abstractions for warehouse tables and semantic views.
+
+The structure also makes the project easier to review and maintain. Each layer has a clear responsibility, which improves traceability from source data to final business outputs.
 
 ## Naming Conventions
 
 Naming conventions:
-- stg_*: staging-layer datasets used for normalized intermediate transformations
-- core_*: warehouse-layer datasets at stable analytical grain
-- analytics.*: DuckDB semantic views built on top of core parquet-backed outputs
-- numbered SQL files: final business queries and semantic view definitions in deterministic review order
+- `stg_*`: staging-layer datasets used for normalized intermediate transformations
+- `core_*`: warehouse-layer datasets at stable analytical grain
+- `core.*`: warehouse core tables loaded into DuckDB as parquet-backed views
+- `analytics.*`: semantic views built on top of the warehouse layer
+- numbered SQL files: view definitions, macros, and business queries stored in deterministic execution order
 
 ## Pipeline Orchestration
 
-**[run_pipeline.py](../scripts/run_pipeline.py)
-The main orchestration entrypoint for the ETL workflow. 
+The data pipeline follows an Extract -> Transform -> Load -> Query sequence.
 
-It sequentially executes extraction, project-scope filtering, staging transformations, warehouse modeling, and DuckDB analytics-layer loading.
-Final business queries are executed separately through [run_queries](../scripts/run_queries.py).
+`run_pipeline.py` is the main orchestration entry point for the ETL workflow. It sequentially executes extraction, project-scope filtering, staging transformations, warehouse modeling, and DuckDB semantic-layer loading.
+
+`run_queries.py` is executed separately to run the final business queries against the DuckDB semantic layer and export query results.
 
 ## Extract
 
-**[extract_mtgjson_data.py](../scripts/extract_mtgjson_data.py)** 
-This step establishes a reproducible, integrity-checked raw data foundation before project-specific filtering and transformation begin.
+`extract_mtgjson_data.py` establishes a reproducible raw-data foundation before project-specific filtering begins.
 
-Downloads the MTGJSON AtomicCards dataset, verifies download integrity using the published SHA256 hash, and extracts the archive.
-The script also records metadata about the source dataset for reproducibility and provenance.
+It downloads the MTGJSON AtomicCards and Sets datasets, verifies download integrity using the published SHA256 hashes, extracts the archives, and records source metadata for provenance and reproducibility.
 
 Outputs to /data/raw
 
 ## Transform
 
-**[select_paper_constructed_cards.py](../scripts/select_paper_constructed_cards.py)**
-Filters the AtomicCards dataset to include only cards relevant to paper constructed formats.
+### Scope Selection
+
+`select_paper_constructed_cards.py` filters the AtomicCards dataset to include only cards relevant to paper-constructed formats.
 
 Excludes cards that:
 - are not legal in any supported paper format
@@ -48,47 +69,36 @@ Excludes cards that:
 
 This step reduces the full dataset to the subset relevant for deckbuilding and gameplay analysis.
 
-Outputs to /data/selected
+Outputs to /data/filtered
 
-**[build_staging_tables.py]**
-Normalizes the curated JSON dataset into structured pandas DataFrames then saves into Parquet files.
+### Staging Normalization
 
-This step flattens the nested AtomicCards structure and prepares tables representing cards, faces, types, keywords, and sets.
+`build_staging_tables.py` normalizes the curated JSON extracts into structured parquet-backed staging tables.
+
+This layer flattens the nested AtomicCards structure into explicit tables representing cards, faces, keywords, types, and sets while preserving source fidelity for later modeling.
 
 Outputs to /data/staging.
 
+### Warehouse Modeling
 
-**[build_core_tables.py]**
-This warehouse layer derives stable analytical features from staging outputs while preserving selected nested source attributes needed for downstream semantic modeling.
+`build_core_tables.py` derives warehouse-layer analytical features from staging outputs while preserving selected nested source attributes needed for downstream semantic modeling.
 
-Canonical warehouse outputs are written as parquet, with preview CSVs included for quick inspection.
+Canonical warehouse outputs are written as parquet, with preview CSVs included for quick inspection and QA.
 
 Outputs to /data/warehouse
 
 ## Load
 
-**[load_into_analytics_database.py]**
-The load step initializes a local DuckDB analytics database, registers warehouse parquet outputs as core.* views, and builds business-facing analytics.* semantic views from version-controlled SQL files.
+`load_into_analytics_database.py` initializes a local DuckDB analytics database, registers warehouse parquet outputs as core.* views, and builds business-facing analytics.* semantic views from version-controlled SQL files.
 
-Adds 4 semantic layer analytics views on top of the warehouse tables.
+This layer provides a reusable analytical interface between the modeled warehouse tables and the final business queries.
 
-- analytics.v_card_design_features
-    Grain: one row per card.
-    Purpose: reusable card-level design attributes for trend and complexity analysis.
-- analytics.v_creature_design_features
-    Grain: one row per valid creature face.
-    Purpose: creature-only efficiency and stat analysis.
-- analytics.v_color_mechanics
-    Grain: one row per card-mechanic observation.
-    Purpose: color identity and mechanic distribution analysis.
-- analytics.v_set_design_profile
-    Grain: one row per set.
-    Purpose: compact release-level fingerprint for consistency and design analysis.
-    Note: Set-level profiles are based on card membership in any printed set, not only original printings.
-    Note: "_share" columns do not total to 100%, because cards can fit multiple categories (e.g. creature type and artifact type)
+Outputs to /data/analytics
 
 ## Query
 
-**[run_queries.py]**
-Querying the DuckDB views to answer product and design questions.
+`run_queries.py` executes version-controlled business queries against the DuckDB semantic layer.
 
+These queries answer the project’s main product and design questions, export result tables to CSV, and write execution metadata for reproducibility and review.
+
+Outputs to /data/output/query_results

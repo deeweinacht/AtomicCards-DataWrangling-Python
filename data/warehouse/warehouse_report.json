@@ -1,12 +1,7 @@
 {
   "read_errors": [],
-  "schema_validation_passed": true,
-  "schema_validation_failures": [],
-  "row_counts": {
-    "card_faces": 31288,
-    "cards": 30530,
-    "keywords": 20508,
-    "types": 68576,
-    "sets": 650
-  }
+  "schema_validation_passed": false,
+  "schema_validation_failures": [
+    "Column \"first_printing_set\" in cards table has dtype object but expected str."
+  ]
 }
