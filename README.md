@@ -112,7 +112,7 @@ The project follows a layered ETL-style workflow:
 5. Warehouse outputs are exposed through DuckDB semantic views
 6. Final business queries are exported as CSV outputs with execution metadata
 
-![Pipeline diagram](docs/images/pipeline_diagram.png)
+![Pipeline diagram](docs/pipeline_diagram.png)
 
 For more detail, see [`docs/pipeline_architecture.md`](docs/pipeline_architecture.md).
 
