@@ -2,34 +2,32 @@
 
 A layered analytics ETL pipeline that transforms semi-structured MTGJSON source data into query-ready analytical datasets for product and design analysis.
 
-This project was built for a theoretical Magic: The Gathering product/design analytics team that needs a reliable way to track how card design evolves over time, assess whether color identities remain differentiated, and identify sets whose design patterns differ from broader release norms.
+This project was built for a theoretical Magic: The Gathering (MTG) product and design analytics team that needs a reliable way to track how card design evolves over time, assess whether color identities remain differentiated, and identify sets whose design patterns differ from broader release norms.
 
 ## Why this project
 
-Magic card data is rich, messy, and highly nested. Answering product and design questions using data from overy thirty years of product releases requires more than ad hoc SQL or notebook analysis. It requires a repeatable data pipeline with clear grains, stable modeled outputs, and a business-facing analytical layer.
+Magic card data is rich, messy, and highly nested. Answering product and design questions using data from over thirty years of product releases requires more than ad hoc SQL or notebook analysis. It requires a repeatable data pipeline with clear grains, stable modeled outputs, and a business-facing analytical layer.
 
 This project builds that system end to end:
 
-- ingests MTGJSON source data
-- filters it to a paper-constructed analytical scope
+- ingests source data from MTGJSON
+- filters it to the analytical scope
 - normalizes nested JSON into structured staging tables
 - models warehouse-layer analytical entities
 - exposes a reusable DuckDB semantic layer
 - answers stakeholder questions through interpretable SQL outputs
 
-## Business problem
+## Stakeholder need
 
-The product/design analytics team needs a reliable card-design analytics layer to:
+The Magic: The Gathering product and design analytics team needs a reliable card-design analytics layer that surfaces the full history of Magic card design for analysis.
 
-- monitor how card characteristics evolve across releases
-- evaluate whether color identities remain distinct
-- identify sets that deviate from expected design patterns
+This project focuses on paper-constructed play: physical cards used for normal deckbuilding and tabletop play, excluding digital-only content and non-playable game objects. That scope keeps the analysis focused on comparable cards that matter for mainstream product and design decisions.
 
+The analytics layer helps the team:
 
-## What this pipeline does
-
-This project extracts and filters MTGJSON card and set data, transforms semi-structured and nested source fields into curated analytical datasets, and exposes a DuckDB semantic layer for business-oriented SQL analysis.
-
+- monitor how card characteristics evolve across releases, so they can identify long-term design shifts, player readability, and changes in product consistency relative to historical baselines
+- evaluate whether color identities remain distinct, so they can track whether game mechanics still differentiate colors in meaningful ways, a core design pillar of Magic
+- identify sets that deviate from broader release norms, so they can distinguish intentional product theming from unexpected composition drift
 
 ## Example business questions answered
 
@@ -37,7 +35,7 @@ This project extracts and filters MTGJSON card and set data, transforms semi-str
 
 - How has card design complexity changed over time?
 - Are newer cards accumulating more text density and rulings burden than earlier designs?
-- How have multicolored and multi-face card structures changed across release eras?
+- How have multicolored and multi-face card designs changed across release eras?
 
 ### Color identity stability
 
@@ -48,8 +46,7 @@ This project extracts and filters MTGJSON card and set data, transforms semi-str
 ### Set design deviation
 
 - Which sets differ most from broader release norms?
-- Do the biggest outliers reflect noise, or intentionally pushed design environments?
-- Which releases stand out because of artifact concentration, color structure, or composition shifts?
+- Do the biggest outliers reflect composition deviations or intentional design choices?
 
 ## Example findings
 
@@ -57,10 +54,9 @@ This project extracts and filters MTGJSON card and set data, transforms semi-str
 
 The analysis shows a clear long-term increase in card complexity. Compared with the first decade of Magic design, recent cards carry substantially more text and significantly more rulings burden.
 
-Across the earliest release periods, cards averaged roughly 19 to 23 text tokens and under 1.1 rulings per card. In the 2021-present period, the number if text tokens is nearly double that and the number of rulings has tripled.
+Across the earliest release periods, cards contained roughly 19 to 23 rules text tokens (words) and under 1.1 published rules clarifications per card. In the 2021-present period, the number of text tokens is nearly double that and the number of rulings has tripled.
 
-This suggests that complexity creep is not just anecdotal. It is visible in the modeled data and may represent a meaningful design concern around player mental load and fatigue.
-
+Design complexity trend by release period:
 | Release period | Avg text tokens per card | Avg rulings count per card | Avg design complexity score | % multicolored cards | % multi-face cards |
 | -------------- | -----------------------: | -------------------------: | --------------------------: | -------------------: | -----------------: |
 | 1993-1995      |                       22 |                       1.05 |                          33 |                    6 |                  0 |
@@ -70,6 +66,10 @@ This suggests that complexity creep is not just anecdotal. It is visible in the 
 | 2011-2015      |                       24 |                       2.46 |                          49 |                   13 |                  1 |
 | 2016-2020      |                       28 |                       3.03 |                          58 |                   15 |                  3 |
 | 2021-Present   |                       37 |                       3.10 |                          68 |                   19 |                  5 |
+
+This suggests that complexity creep is not just anecdotal. It is visible in the modeled data and may represent a meaningful design concern around player mental load and fatigue.
+
+This should be monitored as a design health signal, with follow-up analysis on which card categories are driving the increase in complexity.
 
 ### 2) Color identity is still visible, but not equally exclusive
 
@@ -86,22 +86,26 @@ At the same time, other mechanics are much less exclusive than they may appear:
 - **Enchant** is broadly distributed
 - **Cycling**, **Transform**, and **Equip** do not show strong single-color ownership
 
-The takeaway is not that color identity disappeared. It is that color identity is strong in some mechanics and much more diffuse in others.
+Some mechanics remain tightly color-linked, while others are broadly shared across colors.
+
+The team can use this analysis to distinguish signature mechanics from shared mechanics and monitor whether long-term color differentiation is being preserved intentionally.
 
 ### 3) Set outliers usually reflect intentional design environments
 
 The set deviation analysis identifies releases that differ most from broader design norms using a composite score built from mana value, complexity, type share, and color-structure metrics.
 
-The strongest outliers are not random anomalies. They are usually sets with intentionally pushed design identities, such as artifact-heavy environments or unusually extreme color structures.
+The strongest outliers are not random anomalies. They are usually expansion sets with intentionally pushed design identities, such as artifact-heavy environments or unusually extreme color structures.
 
 Examples include:
-- **Alara Reborn**, which stands out heavily on color structure
-- **Mirrodin**, **Darksteel**, **Fifth Dawn**, and **Antiquities**, which align with unusually artifact-centric environments
+- **Alara Reborn**, which stands out due to atypical color composition
+- **Mirrodin**, **Darksteel**, **Fifth Dawn**, and **Antiquities**, which are composed of unusually high artifact card concentrations
 - **Legions**, which reflects an unusually creature-focused design profile
 
-This suggests the outlier logic is surfacing deliberate product and design choices rather than meaningless statistical noise.
+This suggests the outlier analysis is surfacing deliberate product and design choices rather than meaningless statistical noise.
 
-## Architecture overview
+The deviation score is best used as a release-review flag to confirm whether unusual set composition reflects intended product identity or unexpected drift.
+
+## Architecture summary
 
 The project follows a layered ETL-style workflow:
 
@@ -172,7 +176,7 @@ python scripts/run_queries.py
 - [`docs/decisions_log.md`](docs/decisions_log.md) — key project design and modeling decisions
 - [`docs/SOURCES.md`](docs/SOURCES.md) — source attribution and licensing
 
-### Data Source and Licensing
+## Data source and licensing
 
 This project uses data from [MTGJSON](https://mtgjson.com/) (MIT License).  
 Full attribution and license text can be found in [`docs/SOURCES.md`](docs/SOURCES.md).
