@@ -19,9 +19,9 @@
 
 ## Dataset Filtering
 
-This project focuses on cards relevant to real-world deckbuilding in paper-constructed formats. The MTG AtomicCards dataset was selected as the scope of this project is considering mechanically distinct products, where differences in art and printing are not relevant to the design questions and final analysis.
+This project narrows the full MTGJSON dataset to cards that are relevant to real-world deckbuilding in paper-constructed play. The goal is to analyze card design, not art variation, print treatment, or other release details that do not change the underlying design questions being studied.
 
-The filtering layer narrows MTGJSON source data to a paper-constructed analytical scope suitable for card-design analysis. It excludes digital-only content, non-constructed game objects, selected experimental/joke-only card types, and cards printed exclusively in defined un-set products.
+The filtering layer reduces the MTGJSON source universe to a paper-constructed analytical scope that is suitable for card-design analysis. It excludes digital-only content, non-constructed game objects, selected experimental or joke-only card types, and cards printed exclusively in un-set products.
 
 
 ### Card Selection
@@ -39,20 +39,21 @@ Exclusions remove records that would distort card-design analysis or add non-com
 
 ### Set Selection
 
-The following exclusion rules were applied to the MTGJSON Sets dataset to produce the filtered dataset setlist_paper_constructed.json.
+The following exclusion rules were applied to the MTGJSON Sets dataset to produce `setlist_paper_constructed.json`.
 
-Excluded only sets that are definitively not for paper constructed play:
-- flagged "Online Only"
-- set types "memorabilia" (art cards), "tokens" (temporary indicators), or "minigames" (separate product from MTG)
-- UNSET set codes. Cards printed exclusively in defined un-set products are excluded to avoid mixing intentionally experimental designs into analyses of mainstream card-design patterns.
-- PMEI set code. The PMEI set is excluded because its release metadata behaves as a long-running promotional grouping rather than a standard comparable set release, which would otherwise distort time-based set analysis.
+Excluded sets were limited to those that are definitively not relevant to paper-constructed play:
+
+- sets flagged as `Online Only`
+- set types such as `memorabilia` (art cards), `tokens` (temporary indicators), and `minigames` (separate products from MTG)
+- `UNSET` set codes, because cards printed exclusively in un-set products represent intentionally experimental designs that do not belong in mainstream card-design analysis
+- `PMEI` set code, because it behaves like a long-running promotional grouping rather than a standard comparable set release
 
 ## Staging Tables
 
-Core challenge - the product has had many layout variations of cards over it's 30-year history, including cards with multiple faces.
+Core challenge - the product has had many layout variations of cards over its 30-year history, including cards with multiple faces.
 
-The cleanest way to handle this was to create separate tables for a grain of card and a grain of face. Each card is related to one or more faces.
-The allows clean analysis of features that are inherent to the entire physical card, as well as features that are face-specific.
+The cleanest way to handle this was to create separate tables at card grain and face grain. Each card is related to one or more faces.
+This allows clean analysis of features that are inherent to the entire physical card, as well as features that are face-specific.
 
 data/schemas.json defines the expected structure of both staging and warehouse outputs. The staging pipeline uses it as the source of truth for required columns, target dtypes, and validation checks before parquet outputs are written.
 
@@ -62,9 +63,14 @@ Staging null-handling is applied before schema coercion so that fields represent
 
 ## Warehouse Tables
 
-core_card_faces keeps printed stat fields in their original text form while adding numeric versions and variable-value flags, allowing later analysis to distinguish numeric creature stats from special or symbolic values.
+Card-grain rollups aggregate face, type, keyword, legality, and printing data into stable `core_cards` tables. This creates reusable analytical entities at a consistent card-level grain that supports repeated business analysis without re-deriving from staging tables each time.
 
-### Semantive View Layer
+Face-grain stat derivation in `core_card_faces` computes numeric versions of power, toughness, loyalty, and defense alongside variable-value flags. This preserves printed text values for auditability while enabling numeric analysis that distinguishes ordinary stats from symbolic or variable cases.
+
+Schema validation is a hard build gate that fails the warehouse build if outputs do not match `schemas.json`. This ensures data contract stability across pipeline runs and prevents downstream analysis from consuming malformed warehouse tables.
+
+Preview CSVs are generated alongside canonical Parquet outputs for reviewer inspection* This supports portfolio auditability by making warehouse table contents human-readable without requiring a query engine or Parquet reader.
+## Analytics Layer
 
 After loading curated warehouse tables into DuckDB, a semantic view layer was added to support stakeholder-facing analysis without changing the warehouse source-of-truth tables. This layer exists to keep the warehouse tables stable and reusable, while expressing analysis-specific business logic such as design complexity proxies, creature stat efficiency, color-mechanic mappings, and set-level design profiles in a form that is easier to query and interpret.
 
